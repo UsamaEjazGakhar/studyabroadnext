@@ -1,0 +1,278 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["transactionApi"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  passwordHash  String
+  roleId        Int
+  role          Role      @relation(fields: [roleId], references: [id])
+  student       Student?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  // Relations
+  appointments  Appointment[]
+  payments      Payment[]
+  documents     Document[]
+  notifications Notification[]
+  serviceRequests ServiceRequest[]
+  testimonials  Testimonial[]
+}
+
+model Role {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  users   User[]
+}
+
+model Student {
+  id            Int       @id @default(autoincrement())
+  userId        Int       @unique
+  user          User      @relation(fields: [userId], references: [id])
+  firstName     String
+  lastName      String
+  phone         String?
+  address       String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+
+  // Relations
+  applications  Application[]
+  documents     Document[]
+  notifications Notification[]
+  visaCases     VisaCase[]
+  appointments  Appointment[]
+  testimonials  Testimonial[]
+}
+
+model Application {
+  id               Int            @id @default(autoincrement())
+  studentId        Int
+  scholarshipId    Int?
+  statusId         Int
+  appliedAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  deletedAt        DateTime?
+
+  student          Student        @relation(fields: [studentId], references: [id])
+  scholarship      Scholarship?   @relation(fields: [scholarshipId], references: [id])
+  status           ApplicationStatus @relation(fields: [statusId], references: [id])
+}
+
+model ApplicationStatus {
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
+  applications Application[]
+}
+
+model Scholarship {
+  id                Int                    @id @default(autoincrement())
+  title             String
+  description       String?
+  deadline          DateTime?
+  categoryId        Int
+  universityId      Int
+  countryId         Int
+  benefits          String?
+  eligibility       String?
+  requiredDocuments String?
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  deletedAt         DateTime?
+
+  category          ScholarshipCategory    @relation(fields: [categoryId], references: [id])
+  university        University             @relation(fields: [universityId], references: [id])
+  country           Country                @relation(fields: [countryId], references: [id])
+  applications      Application[]
+}
+
+model ScholarshipCategory {
+  id            Int            @id @default(autoincrement())
+  name          String         @unique
+  scholarships  Scholarship[]
+}
+
+model University {
+  id            Int            @id @default(autoincrement())
+  name          String         @unique
+  countryId     Int
+  description   String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  deletedAt     DateTime?
+
+  country       Country        @relation(fields: [countryId], references: [id])
+  scholarships  Scholarship[]
+}
+
+model Country {
+  id            Int            @id @default(autoincrement())
+  name          String         @unique
+  code          String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  deletedAt     DateTime?
+
+  universities  University[]
+  scholarships  Scholarship[]
+}
+
+model Blog {
+  id            Int            @id @default(autoincrement())
+  title         String
+  slug          String         @unique
+  content       String
+  excerpt       String?
+  publishedAt   DateTime?
+  categoryId    Int
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  deletedAt     DateTime?
+
+  category      BlogCategory   @relation(fields: [categoryId], references: [id])
+}
+
+model BlogCategory {
+  id        Int    @id @default(autoincrement())
+  name      String @unique
+  blogs     Blog[]
+}
+
+model Lead {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String
+  phone       String?
+  source      String?
+  statusId    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  status      LeadStatus @relation(fields: [statusId], references: [id])
+}
+
+model LeadStatus {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  leads Lead[]
+}
+
+model Appointment {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  studentId   Int?
+  scheduledAt DateTime
+  purpose     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  user        User     @relation(fields: [userId], references: [id])
+  student     Student? @relation(fields: [studentId], references: [id])
+}
+
+model Payment {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  amount      Decimal  @db.Decimal(10,2)
+  method      String
+  status      String
+  transactionId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  user        User @relation(fields: [userId], references: [id])
+}
+
+model Document {
+  id          Int      @id @default(autoincrement())
+  userId      Int?
+  studentId   Int?
+  type        String   // e.g., CV, Passport, SOP, etc.
+  path        String   // relative path in public/uploads
+  uploadedAt  DateTime @default(now())
+  deletedAt   DateTime?
+
+  user        User?    @relation(fields: [userId], references: [id])
+  student     Student? @relation(fields: [studentId], references: [id])
+}
+
+model Testimonial {
+  id          Int      @id @default(autoincrement())
+  userId      Int?
+  studentId   Int?
+  content     String
+  authorName  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  user        User?    @relation(fields: [userId], references: [id])
+  student     Student? @relation(fields: [studentId], references: [id])
+}
+
+model SuccessStory {
+  id          Int      @id @default(autoincrement())
+  title       String
+  content     String
+  authorName  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+}
+
+model Notification {
+  id          Int      @id @default(autoincrement())
+  userId      Int?
+  studentId   Int?
+  title       String
+  message     String
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  user        User?    @relation(fields: [userId], references: [id])
+  student     Student? @relation(fields: [studentId], references: [id])
+}
+
+model VisaCase {
+  id          Int      @id @default(autoincrement())
+  studentId   Int
+  status      String
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  student     Student @relation(fields: [studentId], references: [id])
+}
+
+model ServiceRequest {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  type        String   // e.g., Admission Processing, Visa Assistance
+  description String?
+  status      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  user        User @relation(fields: [userId], references: [id])
+}
+
+model EmailSubscriber {
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  subscribedAt DateTime @default(now())
+}
