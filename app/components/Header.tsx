@@ -13,8 +13,14 @@ const Header: React.FC = () => {
           <a href="#success">Success Stories</a>
           <a href="#contact">Contact</a>
         </nav>
-        <div className="nav-cta">
+        <div className="nav-cta" style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
+          <a href="https://wa.me/923001234567" className="btn btn-ghost">
+            <i className="fab fa-whatsapp" /> WhatsApp
+          </a>
           <a href="#consultation" className="btn btn-primary btn-sm">Apply Now</a>
+          <a href="/login" className="btn btn-primary" style={{ padding: "0.5rem 1rem", fontSize: "0.9rem" }}>
+            Login
+          </a>
           <button className="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
             <i className="fas fa-bars"></i>
           </button>

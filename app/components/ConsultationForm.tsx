@@ -26,9 +26,29 @@ const ConsultationForm: React.FC = () => {
     resolver: zodResolver(consultationSchema)
   });
 
-  const onSubmit = (data: ConsultationFormData) => {
-    console.log("Form submitted", data);
-    alert(`Thank you, ${data.name}! 🎓\n\nOur team will contact you shortly via WhatsApp or email. You can also reach us directly on WhatsApp for immediate assistance.`);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const onSubmit = async (data: ConsultationFormData) => {
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/consultation", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert(`Thank you, ${data.name}! 🎓\n\nYour consultation request has been received. Our team will contact you shortly.`);
+      } else {
+        const errorData = await response.json();
+        alert("Failed to submit request: " + (errorData.message || "Please check your inputs."));
+      }
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -115,7 +135,9 @@ const ConsultationForm: React.FC = () => {
                 {errors.terms && <span style={{color: "red", fontSize: "0.8rem"}}>{errors.terms.message}</span>}
               </div>
 
-              <button type="submit" className="form-submit-btn">Get Free Consultation</button>
+              <button type="submit" className="btn-primary" disabled={isSubmitting}>
+                {isSubmitting ? "Submitting..." : "Get Free Consultation"}
+              </button>
             </form>
           </div>
         </div>

@@ -4,14 +4,14 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model User {
   id            Int       @id @default(autoincrement())
   email         String    @unique
-  passwordHash  String
+  isApproved    Boolean   @default(false)
   roleId        Int
   role          Role      @relation(fields: [roleId], references: [id])
   student       Student?
@@ -148,6 +148,18 @@ model BlogCategory {
   blogs     Blog[]
 }
 
+model ConsultationLead {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String
+  program   String
+  country   String
+  education String
+  message   String?
+  createdAt DateTime @default(now())
+}
+
 model Lead {
   id          Int      @id @default(autoincrement())
   name        String
@@ -185,7 +197,7 @@ model Appointment {
 model Payment {
   id          Int      @id @default(autoincrement())
   userId      Int
-  amount      Decimal  @db.Decimal(10,2)
+  amount      Float
   method      String
   status      String
   transactionId String?
