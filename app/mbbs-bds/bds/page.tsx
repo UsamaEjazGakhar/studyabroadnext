@@ -1,5 +1,5 @@
 // BDS page rendering detailed BDS content
-import BDSContent from "./BDSContent";
+import BDSContent from "../BDSContent";
 
 export const metadata = {
   title: "BDS Programme Details – September 2026 Intake",
