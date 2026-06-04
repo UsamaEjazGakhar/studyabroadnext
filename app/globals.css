@@ -147,14 +147,14 @@ ul { list-style: none; }
 .btn:active { transform: translateY(0); }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--teal), #ffffff);
-  color:#fff;
-  box-shadow: var(--sh-orange);
+  background: #0A2A45;
+  color: #FFFFFF;
+   box-shadow: 0 4px 12px rgba(255,255,255,0.5);
   padding: 1rem 2.4rem; /* larger button */
   font-size: 1.05rem;   /* larger text */
   border: none;          /* remove any border */
 }
-.btn-primary:hover { box-shadow: 0 12px 40px rgba(255,107,43,0.38); }
+.btn-primary:hover { box-shadow: 0 12px 40px rgba(255,255,255,0.5); }
 
 .btn-teal { background: linear-gradient(135deg, var(--teal-dark), var(--teal)); color:#fff; box-shadow: var(--sh-teal); }
 .btn-teal:hover { box-shadow: 0 12px 40px rgba(0,201,177,0.35); }

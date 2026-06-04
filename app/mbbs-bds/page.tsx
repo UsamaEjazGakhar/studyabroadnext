@@ -23,7 +23,7 @@ const cardStyle: React.CSSProperties = {
 const headerStyle: React.CSSProperties = { marginBottom: "0.8rem" };
 
 const tagStyle: React.CSSProperties = {
-  background: "#00695c",
+  background: "#000b69ff",
   color: "#fff",
   padding: "2px 6px",
   borderRadius: "4px",
@@ -45,16 +45,16 @@ const metaStyle: React.CSSProperties = {
 const descStyle = { marginBottom: "0.8rem", lineHeight: "1.4" };
 const footStyle = { display: "flex", gap: "0.5rem" };
 const exploreBtnStyle = {
-  background: "#009688",
-  color: "#fff",
+  background: "linear-gradient(135deg, #0A2A45, #6B7280)",
+  color: "#FFFFFF",
   border: "none",
   padding: "0.4rem 0.8rem",
   borderRadius: "4px",
   cursor: "pointer",
 };
 const applyBtnStyle = {
-  background: "#00695c",
-  color: "#fff",
+  background: "linear-gradient(135deg, #0A2A45, #6B7280)",
+  color: "#FFFFFF",
   border: "none",
   padding: "0.4rem 0.8rem",
   borderRadius: "4px",

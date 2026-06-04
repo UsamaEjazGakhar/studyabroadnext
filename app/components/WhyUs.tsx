@@ -9,8 +9,8 @@ const WhyUs: React.FC = () => {
           {/* Left content */}
           <div className="why-content">
             <div className="sec-label">Why Choose Us</div>
-            <h2 className="sec-title">Industry Leaders in Education Abroad</h2>
-            <p className="sec-desc" style={{ color: "rgba(255,255,255,0.6)" }}>
+            <h2 className="sec-title" style={{ color: "#000000" }}>Industry Leaders in Education Abroad</h2>
+            <p className="sec-desc" style={{ color: "#000000" }}>
               Recognized by partner universities worldwide with a proven track record of
               student success spanning 15+ years.
             </p>
@@ -41,7 +41,7 @@ const WhyUs: React.FC = () => {
               </div>
             </div>
             <div style={{ marginTop: "2rem" }}>
-              <a href="#consultation" className="btn btn-teal">Start Your Journey</a>
+              <a href="#consultation" className="btn btn-primary btn-lg">Start Your Journey</a>
             </div>
           </div>
 

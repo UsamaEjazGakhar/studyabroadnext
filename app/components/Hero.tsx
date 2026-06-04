@@ -29,7 +29,7 @@ const Hero: React.FC = () => {
               <a href="#consultation" className="btn btn-primary btn-lg">
                 <i className="fas fa-rocket" /> Free Consultation
               </a>
-              <a href="#programs" className="btn btn-ghost btn-lg">
+              <a href="#programs" className="btn btn-primary btn-lg">
                 Explore Programs <i className="fas fa-arrow-right" />
               </a>
             </div>
