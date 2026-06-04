@@ -58,7 +58,7 @@ const Programs: React.FC = () => {
                 Pursue dental studies with international recognition, modern facilities, and lucrative career opportunities globally.
               </p>
               <div className="pc-foot">
-                                <Link href="/mbbs-bds" className="btn btn-teal btn-sm">Explore</Link>
+                                <Link href="/mbbs-bds/bds" className="btn btn-teal btn-sm">Explore</Link>
                 <a href="#consultation" className="btn btn-primary btn-sm">Apply Now</a>
               </div>
             </div>

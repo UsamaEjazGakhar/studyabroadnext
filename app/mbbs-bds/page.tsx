@@ -6,53 +6,7 @@ export const metadata = {
   description: "Admission open for MBBS and BDS programs in China & Russia. Explore top universities, scholarship details, and apply via WhatsApp.",
 };
 
-const mbbsDetails = `
-✅ MBBS (Bachelor of Medicine & Bachelor of Surgery)
-
-🏫 Top Medical Universities in China:
-• Xi’an Jiaotong University
-• Jiangsu University
-• Jining Medical University
-• Shandong First Medical University
-• Shandong Second Medical University
-• Yangtze University
-• Jiamusi University
-
-🏫 Top Medical Universities in Russia:
-• Kazan Federal University
-• Bashkir State Medical University
-• Orenburg State Medical University
-• Perm State Medical University
-• Tver State Medical University
-• Crimea Federal University
-`;
-const bdsDetails = `
-✅ BDS (Bachelor of Dental Surgery)
-
-🏫 Top Dental Universities in China:
-• Peking University School of Stomatology
-• Shanghai Jiao Tong University
-
-🏫 Top Dental Universities in Russia:
-• Moscow State University Dental Faculty
-• St. Petersburg State Medical University
-`;
-
-const phdDetails = `
-✅ PhD (Doctor of Philosophy) – Research focused degree
-
-💰 Scholarship: Full tuition & hostel free, 15000 RMB stipend per year
-
-📚 Available Majors:
-- Control Science and Engineering
-- Civil Engineering
-- Power Engineering and Engineering Thermophysics
-- Chemical Engineering and Technology
-- Mechanical and Electronic Engineering
-- Material Science and Engineering
-- Manufacturing Information Systems
-- Mechanical Engineering
-`;
+// Duplicate MBBS details removed; using MBBSBDSContent component
 
 export default function MBBSBDSPage() {
   return <MBBSBDSContent />;
