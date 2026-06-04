@@ -1,4 +1,7 @@
+"use client";
 import React from "react";
+import Link from "next/link";
+
 
 const Programs: React.FC = () => {
   return (
@@ -31,7 +34,7 @@ const Programs: React.FC = () => {
                 Study medicine at world-renowned universities with fully funded scholarships and guaranteed placements in healthcare worldwide.
               </p>
               <div className="pc-foot">
-                <a href="#mbbs" className="btn btn-teal btn-sm">Explore</a>
+                                <Link href="/mbbs-bds/mbbs" className="btn btn-teal btn-sm">Explore</Link>
                 <a href="#consultation" className="btn btn-primary btn-sm">Apply Now</a>
               </div>
             </div>
@@ -55,7 +58,7 @@ const Programs: React.FC = () => {
                 Pursue dental studies with international recognition, modern facilities, and lucrative career opportunities globally.
               </p>
               <div className="pc-foot">
-                <a href="#bds" className="btn btn-teal btn-sm">Explore</a>
+                                <Link href="/mbbs-bds" className="btn btn-teal btn-sm">Explore</Link>
                 <a href="#consultation" className="btn btn-primary btn-sm">Apply Now</a>
               </div>
             </div>
@@ -79,7 +82,7 @@ const Programs: React.FC = () => {
                 Advance your research career with fully funded scholarships, world-class mentorship, and publication opportunities.
               </p>
               <div className="pc-foot">
-                <a href="#phd" className="btn btn-teal btn-sm">Explore</a>
+                                  <Link href="/mbbs-bds/phd" className="btn btn-teal btn-sm">Explore</Link>
                 <a href="#consultation" className="btn btn-primary btn-sm">Apply Now</a>
               </div>
             </div>

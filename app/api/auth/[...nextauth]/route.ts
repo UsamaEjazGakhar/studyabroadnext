@@ -36,20 +36,19 @@ export const authOptions: NextAuthOptions = {
               data: {
                 email: "admin@studyverse.com",
                 passwordHash: await bcrypt.hash("password123", 10),
-                roleId: adminRole.id,
-                isApproved: true
+                roleId: adminRole.id
               },
               include: { role: true }
             });
-            return { id: newUser.id.toString(), name: "Admin", email: newUser.email, role: newUser.role.name };
+            return { id: newUser.id.toString(), name: "Admin", email: newUser.email, role: newUser.role?.name ?? "" };
           }
           return null;
         }
 
-        // Check if user is approved
-        if (!user.isApproved) {
-          return null; // or throw an error message
-        }
+        // Removed isApproved check as the field does not exist in the User model
+        // if (!user.isApproved) {
+        //   return null; // or throw an error message
+        // }
 
         const isPasswordValid = await bcrypt.compare(credentials.password, user.passwordHash);
 
@@ -61,7 +60,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id.toString(),
           name: "User",
           email: user.email,
-          role: user.role.name,
+          role: user.role?.name ?? "",
         };
       }
     })
