@@ -6,14 +6,13 @@ export const metadata = {
   description: "Details for MBBS admissions – September 2026 intake.",
 };
 
-const mbbsDetails = `🎓✨ MBBS & BDS Admission Open – September 2026 Intake ✨🎓
+const mbbsDetails = `🎓✨ MBBS Admission Open – September 2026 Intake ✨🎓
 
 🌍 Start Your Medical Journey in China & Russia with Top Universities!
 
-🔰 Programs Available:
+🔰 Program Available:
 
 ✅ MBBS (Bachelor of Medicine & Bachelor of Surgery)
-✅ BDS (Bachelor of Dental Surgery)
 
 🏫 Top Medical Universities in China:
 • Xi’an Jiaotong University
@@ -34,24 +33,23 @@ const mbbsDetails = `🎓✨ MBBS & BDS Admission Open – September 2026 Intake
 
 💡 Why Choose These Universities?
 
-✅ Specialized Stomatological Affiliated Teaching Hospital (SATH)
+✅ English-Medium MBBS Programs
 ✅ Globally Recognized Degrees
 🌍 Approved by ECFMG | WHO | WFME
 ✅ Top-Ranked Medical Universities
 ✅ Affordable Tuition Fees & Living Costs
-✅ International Student-Friendly Environment
+✅ International Student‑Friendly Environment
+✅ Clinical Training at Affiliated Teaching Hospitals
 
 ⏳ Limited Seats Available – Apply Now for Fall 2026!
 
 🤝 Agents & Partner Companies are warmly welcome to collaborate with us!
 
-📞 WhatsApp:
-+92 333 1165573
+📞 WhatsApp: +92 333 1165573
 
-📧 Email:
-themedixus@gmail.com
+📧 Email: themedixus@gmail.com
 
-📩 Contact us today to secure your seat and start your journey toward a successful medical career!`;
+📩 Contact us today to secure your seat and begin your journey toward becoming a doctor!`;
 
 export default function MBBSBDSContent() {
   return (
