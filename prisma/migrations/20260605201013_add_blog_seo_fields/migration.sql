@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE `blog` ADD COLUMN `featuredImage` VARCHAR(191) NULL,
+    ADD COLUMN `metaDesc` VARCHAR(191) NULL,
+    ADD COLUMN `metaTitle` VARCHAR(191) NULL,
+    ADD COLUMN `tags` VARCHAR(191) NULL,
+    MODIFY `content` TEXT NOT NULL;

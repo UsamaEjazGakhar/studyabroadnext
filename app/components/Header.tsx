@@ -6,11 +6,12 @@ const Header: React.FC = () => {
       <div className="navbar">
         <div className="logo">StudyVerse</div>
         <nav className="nav-links" id="nav-links">
-          <a href="#home">Home</a>
+          <a href="/">Home</a>
           <a href="#programs">Programs</a>
+          <a href="/universities">Universities</a>
+          <a href="/opportunities">Opportunities</a>
+          <a href="/blog">Blog</a>
           <a href="#services">Services</a>
-          <a href="#why">Why Us</a>
-          <a href="#success">Success Stories</a>
           <a href="#contact">Contact</a>
         </nav>
         <div className="nav-cta" style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>

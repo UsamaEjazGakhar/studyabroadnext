@@ -4,13 +4,14 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
   id            Int       @id @default(autoincrement())
   email         String    @unique
+  passwordHash  String
   isApproved    Boolean   @default(false)
   roleId        Int
   role          Role      @relation(fields: [roleId], references: [id])
@@ -107,12 +108,21 @@ model University {
   name          String         @unique
   countryId     Int
   description   String?
+  ranking       Int?
+  tuitionFees   String?
+  programs      String?
+  intakeDates   String?
+  facilities    String?
+  eligibility   String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   deletedAt     DateTime?
 
   country       Country        @relation(fields: [countryId], references: [id])
   scholarships  Scholarship[]
+  phDPrograms   PhdProgram[]
+  supervisors   Supervisor[]
+  details       UniversityDetail[]
 }
 
 model Country {
@@ -125,14 +135,56 @@ model Country {
 
   universities  University[]
   scholarships  Scholarship[]
+  phDPrograms   PhdProgram[]
+  details       CountryDetail[]
+  costBreakdowns CostBreakdown[]
 }
+
+model CostBreakdown {
+  id          Int      @id @default(autoincrement())
+  countryId   Int
+  title       String
+  amount      String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  country Country @relation(fields: [countryId], references: [id])
+}
+
+model CountryDetail {
+  id          Int      @id @default(autoincrement())
+  countryId   Int
+  section     String
+  content     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  country Country @relation(fields: [countryId], references: [id])
+}
+
+model UniversityDetail {
+  id           Int      @id @default(autoincrement())
+  universityId Int
+  section      String
+  content      String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  university University @relation(fields: [universityId], references: [id])
+}
+
 
 model Blog {
   id            Int            @id @default(autoincrement())
   title         String
   slug          String         @unique
-  content       String
+  content       String         @db.Text
   excerpt       String?
+  metaTitle     String?
+  metaDesc      String?
+  tags          String?
+  featuredImage String?
   publishedAt   DateTime?
   categoryId    Int
   createdAt     DateTime       @default(now())
@@ -287,4 +339,73 @@ model EmailSubscriber {
   id          Int      @id @default(autoincrement())
   email       String   @unique
   subscribedAt DateTime @default(now())
+}
+
+model ScholarshipAlert {
+  id           Int      @id @default(autoincrement())
+  title        String
+  region       String
+  university   String?
+  amount       String?
+  deadline     DateTime?
+  link         String?
+  description  String?
+  isNotified   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  title       String
+  type        String
+  date        DateTime
+  description String?
+  link        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Resource {
+  id          Int      @id @default(autoincrement())
+  title       String
+  type        String
+  fileUrl     String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model PhdProgram {
+  id              Int      @id @default(autoincrement())
+  title           String
+  description     String?
+  countryId       Int
+  universityId    Int
+  researchAreaId  Int
+  supervisorId    Int?
+  eligibility     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  deletedAt       DateTime?
+
+  country       Country   @relation(fields: [countryId], references: [id])
+  university    University @relation(fields: [universityId], references: [id])
+  researchArea  ResearchArea @relation(fields: [researchAreaId], references: [id])
+  supervisor    Supervisor? @relation(fields: [supervisorId], references: [id])
+}
+
+model ResearchArea {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  phdPrograms PhdProgram[]
+}
+
+model Supervisor {
+  id          Int      @id @default(autoincrement())
+  name        String
+  universityId Int
+  profile     String?
+  phdPrograms PhdProgram[]
+
+  university   University @relation(fields: [universityId], references: [id])
 }
