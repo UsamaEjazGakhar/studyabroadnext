@@ -3,7 +3,7 @@ import Link from "next/link";
 import Head from "next/head";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { authOptions } from "../../../api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
 import Sidebar from "../../components/Sidebar";
 import LogoutButton from "../../LogoutButton";

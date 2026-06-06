@@ -1,0 +1,90 @@
+/* admin.module.css - Premium admin dashboard styling */
+
+/* Full-screen gradient background using navy palette */
+.adminContainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--navy), var(--indigo-mid));
+  display: flex;
+  flex-direction: column;
+}
+
+/* Glass‑morphism card for main content */
+.adminCard {
+  flex: 1;
+  margin: 2rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-md);
+  overflow: hidden;
+}
+
+/* Header styling */
+.adminHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+.adminHeader h1 {
+  font-family: var(--font-head);
+  color: var(--navy);
+  font-size: 2rem;
+}
+.adminHeader span {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* Table styling */
+.adminTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.adminTable th {
+  background: var(--surface-2);
+  color: var(--text-muted);
+  padding: 1rem;
+  text-align: left;
+}
+.adminTable td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--surface-2);
+}
+
+/* Badge overrides – use navy hue */
+.badge-teal {
+  background: rgba(30,58,138,0.12);
+  color: var(--navy);
+  border: 1px solid rgba(30,58,138,0.3);
+}
+.adminMain {
+  flex: 1;
+  padding: 2rem;
+  background: var(--surface-1);
+}
+
+.adminWrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.adminTitle {
+  font-family: var(--font-head);
+  color: var(--navy);
+  font-size: 2rem;
+}
+
+.adminHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.adminUserStatus {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}

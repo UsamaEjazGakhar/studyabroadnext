@@ -23,13 +23,14 @@ const Sidebar = () => {
     <aside
       style={{
         width: "240px",
-        background: "var(--surface-2)",
-        padding: "1.5rem",
+        background: "#020620ff",
+        padding: "2rem 1.5rem 1.5rem 1.5rem",
         borderRight: "1px solid var(--surface-3)",
         minHeight: "100vh",
         boxSizing: "border-box",
       }}
     >
+      <h2 style={{ color: "#ffffff", marginBottom: "1rem", fontSize: "1.5rem" }}>AdminSidebar</h2>
       <nav>
         <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
           {links.map((link) => (
@@ -38,7 +39,7 @@ const Sidebar = () => {
                 href={link.href}
                 style={{
                   textDecoration: "none",
-                  color: "var(--text-head)",
+                  color: "#ffffff",
                   fontWeight: 500,
                 }}
               >
@@ -48,17 +49,17 @@ const Sidebar = () => {
           ))}
           {/* Country specific dashboards */}
           <li style={{ marginBottom: "1rem" }}>
-            <Link href="/admin/countries/europe" style={{ textDecoration: "none", color: "var(--text-head)", fontWeight: 500 }}>
+            <Link href="/admin/countries/europe" style={{ textDecoration: "none", color: "#ffffff", fontWeight: 500 }}>
               Europe Scholarships
             </Link>
           </li>
           <li style={{ marginBottom: "1rem" }}>
-            <Link href="/admin/countries/russia" style={{ textDecoration: "none", color: "var(--text-head)", fontWeight: 500 }}>
+            <Link href="/admin/countries/russia" style={{ textDecoration: "none", color: "#ffffff", fontWeight: 500 }}>
               Russia Scholarships
             </Link>
           </li>
           <li style={{ marginBottom: "1rem" }}>
-            <Link href="/admin/countries/china" style={{ textDecoration: "none", color: "var(--text-head)", fontWeight: 500 }}>
+            <Link href="/admin/countries/china" style={{ textDecoration: "none", color: "#ffffff", fontWeight: 500 }}>
               China Scholarships
             </Link>
           </li>
