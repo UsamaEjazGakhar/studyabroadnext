@@ -1,38 +1,39 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+"use server";
+
+import { NextResponse } from "next/server";
+
+type University = {
+  id: number;
+  name: string;
+  country: string;
+  website?: string;
+  createdAt: string;
+};
+
+let universities: University[] = [];
+let nextId = 1;
 
 export async function GET() {
-  try {
-    const universities = await prisma.university.findMany({
-      where: { deletedAt: null },
-      include: { country: true },
-      orderBy: { createdAt: "desc" },
-    });
-    return NextResponse.json(universities);
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch universities" }, { status: 500 });
-  }
+  return NextResponse.json(universities);
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const body = await req.json();
-    const { name, countryId, description, ranking, tuitionFees, programs, intakeDates, facilities, eligibility } = body;
-    const university = await prisma.university.create({
-      data: {
-        name,
-        countryId: parseInt(countryId),
-        description,
-        ranking: ranking ? parseInt(ranking) : null,
-        tuitionFees,
-        programs,
-        intakeDates,
-        facilities,
-        eligibility,
-      },
-    });
-    return NextResponse.json(university, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to create university" }, { status: 500 });
+    const { name, country, website } = await request.json();
+    if (!name || !country) {
+      return new NextResponse("Missing required fields", { status: 400 });
+    }
+    const newUni: University = {
+      id: nextId++,
+      name,
+      country,
+      website: website || "",
+      createdAt: new Date().toISOString(),
+    };
+    universities.push(newUni);
+    return NextResponse.json(newUni, { status: 201 });
+  } catch (e) {
+    console.error(e);
+    return new NextResponse("Invalid JSON", { status: 400 });
   }
 }
