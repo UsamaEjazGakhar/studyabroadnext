@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import LogoutButton from "../LogoutButton";
 
-function Modal({ children, onClose }) {
+function Modal({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
   return (
     <div
       style={{

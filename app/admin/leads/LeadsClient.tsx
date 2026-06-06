@@ -5,7 +5,7 @@ import Sidebar from "../components/Sidebar";
 import LogoutButton from "../LogoutButton";
 
 // Simple Modal component
-function Modal({ children, onClose }) {
+function Modal({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
   return (
     <div
       style={{
@@ -152,7 +152,7 @@ export default function LeadsClient() {
       <main style={{ flex: 1, padding: "2rem" }}>
         {/* Header with title and add button */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
-                      <h2 style={{ background: "#020620ff", color: "#fff", padding: "0.5rem 1rem", borderRadius: "4px", margin: 0, fontSize: "1.5rem", fontWeight: "600" }}>
+          <h2 style={{ background: "#020620ff", color: "#fff", padding: "0.5rem 1rem", borderRadius: "4px", margin: 0, fontSize: "1.5rem", fontWeight: "600" }}>
             Lead List
           </h2>
           <button
@@ -168,7 +168,7 @@ export default function LeadsClient() {
             Add Lead
           </button>
         </div>
-        
+
 
         {/* Leads Table */}
         {loading ? (
