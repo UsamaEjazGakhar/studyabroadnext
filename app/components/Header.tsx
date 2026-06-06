@@ -1,4 +1,6 @@
+"use client";
 import React from "react";
+import Link from "next/link";
 
 const Header: React.FC = () => {
   return (
@@ -19,9 +21,7 @@ const Header: React.FC = () => {
             <i className="fab fa-whatsapp" /> WhatsApp
           </a>
           <a href="#consultation" className="btn btn-primary btn-sm">Apply Now</a>
-          <a href="/login" className="btn btn-primary" style={{ padding: "0.5rem 1rem", fontSize: "0.9rem" }}>
-            Login
-          </a>
+          <Link href="/login" className="btn btn-primary" style={{ padding: "0.5rem 1rem", fontSize: "0.9rem" }}>Login</Link>
           <button className="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
             <i className="fas fa-bars"></i>
           </button>
