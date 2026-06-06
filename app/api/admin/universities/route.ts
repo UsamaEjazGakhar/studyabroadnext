@@ -2,16 +2,8 @@
 
 import { NextResponse } from "next/server";
 
-type University = {
-  id: number;
-  name: string;
-  country: string;
-  website?: string;
-  createdAt: string;
-};
-
-let universities: University[] = [];
-let nextId = 1;
+import type { University } from "./store";
+import { universities } from "./store";
 
 export async function GET() {
   return NextResponse.json(universities);
@@ -24,7 +16,7 @@ export async function POST(request: Request) {
       return new NextResponse("Missing required fields", { status: 400 });
     }
     const newUni: University = {
-      id: nextId++,
+      id: Date.now(),
       name,
       country,
       website: website || "",

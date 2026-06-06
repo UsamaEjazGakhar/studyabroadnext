@@ -1,37 +1,39 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server";
+import { universities } from "../store";
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
-    const id = parseInt(params.id);
-    const body = await req.json();
-    const { name, countryId, description, ranking, tuitionFees, programs, intakeDates, facilities, eligibility } = body;
-    const university = await prisma.university.update({
-      where: { id },
-      data: {
-        name,
-        countryId: countryId ? parseInt(countryId) : undefined,
-        description,
-        ranking: ranking ? parseInt(ranking) : null,
-        tuitionFees,
-        programs,
-        intakeDates,
-        facilities,
-        eligibility,
-      },
-    });
-    return NextResponse.json(university);
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to update university" }, { status: 500 });
+    const { id: idStr } = await params;
+    const id = parseInt(idStr);
+    const { name, country, website } = await request.json();
+    if (!name || !country) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+    const index = universities.findIndex(u => u.id === id);
+    if (index === -1) {
+      return NextResponse.json({ error: "University not found" }, { status: 404 });
+    }
+    const updated = { ...universities[index], name, country, website: website || "" };
+    universities[index] = updated;
+    return NextResponse.json(updated);
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json({ error: "Failed to update" }, { status: 500 });
   }
 }
 
-export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
   try {
-    const id = parseInt(params.id);
-    await prisma.university.update({ where: { id }, data: { deletedAt: new Date() } });
+    const { id: idStr } = await params;
+    const id = parseInt(idStr);
+    const index = universities.findIndex(u => u.id === id);
+    if (index === -1) {
+      return NextResponse.json({ error: "University not found" }, { status: 404 });
+    }
+    universities.splice(index, 1);
     return NextResponse.json({ success: true });
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to delete university" }, { status: 500 });
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
   }
 }
