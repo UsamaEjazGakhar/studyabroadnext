@@ -44,7 +44,7 @@ export default function UniversitiesClient() {
   type University = {
     id: number;
     name: string;
-    country: string;
+    country: string; // country name
     website?: string;
     createdAt: string;
   };
@@ -68,7 +68,15 @@ export default function UniversitiesClient() {
     fetch("/api/admin/universities")
       .then((r) => r.json())
       .then((data) => {
-        setUniversities(data);
+        // Map country relation to country name string
+        const transformed = data.map((u: any) => ({
+          id: u.id,
+          name: u.name,
+          country: u.country?.name || u.country || "",
+          website: u.website,
+          createdAt: u.createdAt,
+        }));
+        setUniversities(transformed);
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -96,8 +104,10 @@ export default function UniversitiesClient() {
       });
       if (!res.ok) throw new Error("Request failed");
       const saved = await res.json();
+      // Ensure the saved university has a country string for UI consistency
+      const normalized = { ...saved, country: form.country };
       setUniversities((prev) =>
-        editId ? prev.map((u) => (u.id === saved.id ? saved : u)) : [...prev, saved]
+        editId ? prev.map((u) => (u.id === normalized.id ? normalized : u)) : [...prev, normalized]
       );
       resetForm();
       setModalMode(null);
@@ -108,7 +118,12 @@ export default function UniversitiesClient() {
 
   const openEdit = (uni: University) => {
     setEditId(uni.id);
-    setForm(uni);
+    // Set form fields directly; country is already a string
+    setForm({
+      name: uni.name,
+      country: uni.country,
+      website: uni.website,
+    });
     setSelectedUniversity(uni);
     setModalMode("edit");
   };
