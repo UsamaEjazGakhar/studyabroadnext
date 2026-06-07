@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { universities } from "../store";
+import { prisma } from "@/lib/prisma"; // Prisma client
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -9,12 +9,10 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     if (!name || !country) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
-    const index = universities.findIndex(u => u.id === id);
-    if (index === -1) {
-      return NextResponse.json({ error: "University not found" }, { status: 404 });
-    }
-    const updated = { ...universities[index], name, country, website: website || "" };
-    universities[index] = updated;
+    const updated = await prisma.university.update({
+      where: { id },
+      data: { name, country: { connect: { name: country } }, website: website || "" },
+    });
     return NextResponse.json(updated);
   } catch (e) {
     console.error(e);
@@ -26,11 +24,7 @@ export async function DELETE(_request: Request, { params }: { params: Promise<{ 
   try {
     const { id: idStr } = await params;
     const id = parseInt(idStr);
-    const index = universities.findIndex(u => u.id === id);
-    if (index === -1) {
-      return NextResponse.json({ error: "University not found" }, { status: 404 });
-    }
-    universities.splice(index, 1);
+    await prisma.university.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (e) {
     console.error(e);

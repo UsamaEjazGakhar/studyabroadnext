@@ -10,21 +10,7 @@ import LogoutButton from "../../../LogoutButton";
 
 const prisma = new PrismaClient();
 
-const SECTION_LABELS: Record<string, string> = {
-  cost: "Cost Breakdown",
-  fees: "Fees Information",
-  duration: "Duration",
-  recognition: "Recognition",
-  living_costs: "Living Costs",
-  hostel_details: "Hostel Details",
-  scholarships: "Scholarships",
-  universities: "Universities",
-  visa: "Visa Process",
-  work: "Work Rights",
-  pr: "PR Opportunities",
-  living: "Living Guide",
-  life: "Student Life",
-};
+const SECTION_LABELS: Record<string, string> = {};
 
 export default async function CountrySectionPage({
   params,

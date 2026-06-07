@@ -115,6 +115,7 @@ model University {
   facilities    String?
   eligibility   String?
   createdAt     DateTime       @default(now())
+  website      String?        // optional website field
   updatedAt     DateTime       @updatedAt
   deletedAt     DateTime?
 
