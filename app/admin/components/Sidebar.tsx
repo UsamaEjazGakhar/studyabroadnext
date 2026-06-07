@@ -1,13 +1,14 @@
 "use client";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
-import React from "react";
+import { useRouter } from "next/navigation";
 
 /**
  * Sidebar navigation for the Admin Dashboard.
  * Includes placeholder links for admin functionalities.
  */
 const Sidebar = () => {
+  const router = useRouter();
   const links = [
     { href: "/admin", label: "Dashboard" },
     { href: "/admin/leads", label: "Leads" },
@@ -69,7 +70,7 @@ const Sidebar = () => {
         {/* Logout button */}
         <li style={{ marginTop: "1rem", listStyle: "none" }}>
           <button
-            onClick={() => signOut({ callbackUrl: "/admin" })}
+            onClick={() => { signOut({ redirect: false }); router.replace('/login'); }}
             style={{
               background: "none",
               border: "none",
@@ -90,3 +91,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
