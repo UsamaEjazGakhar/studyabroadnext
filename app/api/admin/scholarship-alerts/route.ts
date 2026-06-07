@@ -5,12 +5,13 @@ const prisma = new PrismaClient();
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { title, region, university, amount, deadline, link, description } = body;
+    const { title, region, universityId, countryId, amount, deadline, link, description } = body;
     const alert = await prisma.scholarshipAlert.create({
       data: {
         title,
         region,
-        university: university ?? null,
+        universityId: body.universityId,
+        countryId: body.countryId,
         amount: amount ?? null,
         deadline: deadline ? new Date(deadline) : null,
         link: link ?? null,

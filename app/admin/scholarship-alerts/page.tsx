@@ -31,10 +31,25 @@ export default async function ScholarshipAlertsPage({
   }
 
   // Fetch scholarship alerts
+  // Fetch scholarship alerts with relational data
   const alerts = await prisma.scholarshipAlert.findMany({
     where: whereClause,
     orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      title: true,
+      region: true,
+      amount: true,
+      deadline: true,
+      isNotified: true,
+
+      description: true,
+      university: { select: { name: true } },
+      country: { select: { name: true } },
+      createdAt: true,
+    },
   });
+
 
   // Also fetch scholarships (non‑alert records) matching the same region
   const scholarshipWhere: any = {};
@@ -166,7 +181,11 @@ export default async function ScholarshipAlertsPage({
                       </td>
                       <td style={{ padding: "1rem", fontWeight: 500 }}>
                         {alert.title}
-                        {alert.university && <div style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: "0.2rem" }}>{alert.university}</div>}
+                        {alert.university && (
+                        <div style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: "0.2rem" }}>
+                          {typeof alert.university === "object" ? alert.university.name : alert.university}
+                        </div>
+                      )}
                       </td>
                       <td style={{ padding: "1rem", color: "var(--text-body)" }}>{alert.amount || "N/A"}</td>
                         <td style={{ padding: "1rem" }}>
