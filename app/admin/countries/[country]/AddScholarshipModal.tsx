@@ -8,21 +8,25 @@ type University = {
 
 type AddScholarshipModalProps = {
   countryId: number;
-  universities: University[];
+  universitiesJSON: string; // JSON string of universities
 };
 
-const AddScholarshipModal: React.FC<AddScholarshipModalProps> = ({ countryId, universities }) => {
+const AddScholarshipModal: React.FC<AddScholarshipModalProps> = ({ countryId, universitiesJSON }) => {
+  const universities: University[] = JSON.parse(universitiesJSON);
+  console.log('AddScholarshipModal received universities:', universities);
+
   const [showModal, setShowModal] = useState(false);
 
   const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget as HTMLFormElement;
     const data = new FormData(form);
+    console.log('Universities prop length:', universities.length); // Debug log
     const payload = {
       title: data.get('title') as string,
       description: data.get('description') as string,
-      universityId: data.get('universityId') as string,
-      category: data.get('category') as string,
+      universityId: parseInt(data.get('universityId') as string, 10),
+      categoryId: parseInt(data.get('categoryId') as string, 10),
       countryId,
     };
     try {
@@ -60,7 +64,7 @@ const AddScholarshipModal: React.FC<AddScholarshipModalProps> = ({ countryId, un
                 <select name="universityId" required defaultValue="">
                   <option value="" disabled>Select a university</option>
                   {universities.map(u => (
-                    <option key={u.id} value={u.id}>
+                    <option key={u.id} value={u.id.toString()}>
                       {u.name}
                     </option>
                   ))}
@@ -68,10 +72,10 @@ const AddScholarshipModal: React.FC<AddScholarshipModalProps> = ({ countryId, un
               </label>
               <label>
                 Category
-                <select name="category" required>
-                  <option value="MBBS">MBBS</option>
-                  <option value="BDS">BDS</option>
-                  <option value="PHD">PHD</option>
+                <select name="categoryId" required>
+                  <option value="1">MBBS</option>
+                  <option value="2">BDS</option>
+                  <option value="3">PHD</option>
                 </select>
               </label>
               <div className="modal-actions">
@@ -148,7 +152,7 @@ const AddScholarshipModal: React.FC<AddScholarshipModalProps> = ({ countryId, un
         }
         .submit-btn {
           background: var(--primary);
-          color: #fff;
+          color: #000;
           border: none;
           padding: 0.5rem 1rem;
           border-radius: 6px;

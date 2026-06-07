@@ -41,25 +41,49 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const {
-      title,
-      description,
-      deadline,
-      benefits,
-      eligibility,
-      requiredDocuments,
-      countryId,
-      categoryId,
-      universityId,
-    } = body;
+  console.log('POST /api/admin/scholarships body:', body);
+  // Normalize IDs to numbers (if they exist)
+  const parsedCategoryId = body.categoryId ? parseInt(body.categoryId as any, 10) : undefined;
+  const parsedUniversityId = body.universityId ? parseInt(body.universityId as any, 10) : undefined;
+  const parsedCountryId = body.countryId ? parseInt(body.countryId as any, 10) : undefined;
+  const {
+    title,
+    description,
+    deadline,
+    benefits,
+    eligibility,
+    requiredDocuments,
+    countryId = parsedCountryId,
+    categoryId = parsedCategoryId,
+    universityId = parsedUniversityId,
+  } = { ...body, countryId: parsedCountryId, categoryId: parsedCategoryId, universityId: parsedUniversityId };
+
 
     if (!title || !countryId) {
       return NextResponse.json({ error: "Missing required fields (title, countryId)" }, { status: 400 });
     }
 
-    // Ensure category exists
+    // Ensure category exists (create if missing)
     let finalCategoryId = categoryId;
-    if (!finalCategoryId) {
+    if (finalCategoryId) {
+      // Try to find the category by ID
+      const existing = await prisma.scholarshipCategory.findUnique({
+        where: { id: parseInt(finalCategoryId) },
+      });
+      if (!existing) {
+        // Map known IDs to names or fallback
+        const nameMap: { [key: string]: string } = {
+          "1": "MBBS",
+          "2": "BDS",
+          "3": "PHD",
+        };
+        const catName = nameMap[finalCategoryId] || `Category-${finalCategoryId}`;
+        const created = await prisma.scholarshipCategory.create({
+          data: { name: catName },
+        });
+        finalCategoryId = created.id;
+      }
+    } else {
       const defaultCategory = await prisma.scholarshipCategory.upsert({
         where: { name: "General" },
         update: {},

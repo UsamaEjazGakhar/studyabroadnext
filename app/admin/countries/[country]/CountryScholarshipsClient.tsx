@@ -143,7 +143,13 @@ export default function CountryScholarshipsClient({
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error("Request failed");
+      if (!res.ok) {
+        // Capture error details for debugging and user feedback
+        const errorText = await res.text();
+        console.error('API request failed', res.status, errorText);
+        setError('Failed to save scholarship – please check console for details.');
+        return; // abort further processing
+      }
       const saved = await res.json();
 
       setScholarships((prev) =>
@@ -430,7 +436,7 @@ export default function CountryScholarshipsClient({
                 style={{
                   flex: 1,
                   background: "var(--primary)",
-                  color: "#fff",
+                  color: "#000",
                   border: "none",
                   padding: "0.75rem",
                   borderRadius: "6px",

@@ -58,7 +58,7 @@ export default async function CountryDashboard({ params }: { params: Promise<{ c
   if (!country) {
     return (
       <div style={{ padding: "2rem" }}>
-        <AddScholarshipModal countryId={0} universities={[]} />
+        <AddScholarshipModal countryId={0} universitiesJSON={JSON.stringify([])} />
         <Link href="/admin" style={{ color: "var(--link)" }}>
           ← Back to Dashboard
         </Link>
@@ -66,8 +66,33 @@ export default async function CountryDashboard({ params }: { params: Promise<{ c
     );
   }
 
-  const categories = await prisma.scholarshipCategory.findMany();
-  const universities = await prisma.university.findMany();
+  // Debug country ID
+  console.log('Country ID:', country?.id);
+  // Hardcoded category list as per user request
+  const categories = [
+    { id: 1, name: 'MBBS' },
+    { id: 2, name: 'BDS' },
+    { id: 3, name: 'PHD' },
+  ];
+  // Fetch only universities belonging to the current country
+  const universities = await prisma.university.findMany({
+    where: { countryId: country.id },
+    select: { id: true, name: true },
+  });
+  console.log('Fetched country:', country?.name);
+  console.log('Fetched universities count:', universities.length);
+  console.log('Universities fetched:', universities);
+  // If no universities for this country, fetch all (debug fallback)
+  let finalUniversities = universities;
+  if (universities.length === 0) {
+    console.warn('No universities found for country ID', country?.id, '- fetching all universities as fallback');
+    finalUniversities = await prisma.university.findMany({
+      select: { id: true, name: true },
+    });
+  }
+  console.log('Universities used for modal:', finalUniversities.length);
+  const universitiesJSON = JSON.stringify(finalUniversities);
+
 
   return (
     <>
@@ -99,7 +124,11 @@ export default async function CountryDashboard({ params }: { params: Promise<{ c
                 ))}
               </ul>
             </nav>
-            <AddScholarshipModal countryId={country.id} universities={universities} />
+          {/* Debug info */}
+          <p style={{fontSize:'0.9rem',color:'var(--text-muted)'}}>
+            Country: {country?.name ?? 'N/A'} | Universities: {universities.length}
+          </p>
+          <AddScholarshipModal countryId={country.id} universitiesJSON={universitiesJSON} />
           </div>
 
           <CountryScholarshipsClient
