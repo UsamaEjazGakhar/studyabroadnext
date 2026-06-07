@@ -9,6 +9,10 @@ import { useRouter } from "next/navigation";
  */
 const Sidebar = () => {
   const router = useRouter();
+  const handleLogout = () => {
+    signOut({ redirect: false });
+    router.replace('/login');
+  };
   const links = [
     { href: "/admin", label: "Dashboard" },
     { href: "/admin/leads", label: "Leads" },
@@ -70,7 +74,7 @@ const Sidebar = () => {
         {/* Logout button */}
         <li style={{ marginTop: "1rem", listStyle: "none" }}>
           <button
-            onClick={() => { signOut({ redirect: false }); router.replace('/login'); }}
+            onClick={handleLogout}
             style={{
               background: "none",
               border: "none",
