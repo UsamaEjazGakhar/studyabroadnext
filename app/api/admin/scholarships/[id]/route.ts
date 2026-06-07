@@ -26,95 +26,103 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
   }
 }
 
-export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  try {
-    const resolvedParams = await params;
-    const id = parseInt(resolvedParams.id);
-    const body = await request.json();
+  export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    try {
+      const resolvedParams = await params;
+      const id = parseInt(resolvedParams.id);
+      const body = await request.json();
 
-    const {
-      title,
-      description,
-      deadline,
-      benefits,
-      eligibility,
-      requiredDocuments,
-      countryId,
-      categoryId,
-      universityId,
-    } = body;
+      // Parse IDs to numbers if they exist
+      const parsedCategoryId = body.categoryId ? parseInt(body.categoryId as any, 10) : undefined;
+      const parsedUniversityId = body.universityId ? parseInt(body.universityId as any, 10) : undefined;
+      const parsedCountryId = body.countryId ? parseInt(body.countryId as any, 10) : undefined;
 
-    // Check if scholarship exists first
-    const existing = await prisma.scholarship.findUnique({
-      where: { id },
-    });
+      const {
+        title,
+        description,
+        deadline,
+        benefits,
+        eligibility,
+        requiredDocuments,
+        countryId = parsedCountryId,
+        categoryId = parsedCategoryId,
+        universityId = parsedUniversityId,
+      } = { ...body, countryId: parsedCountryId, categoryId: parsedCategoryId, universityId: parsedUniversityId };
 
-    if (!existing) {
-      return NextResponse.json({ error: "Scholarship not found" }, { status: 404 });
-    }
+      // Fetch existing scholarship
+      const existing = await prisma.scholarship.findUnique({ where: { id } });
+      if (!existing) return NextResponse.json({ error: "Scholarship not found" }, { status: 404 });
 
-    // Ensure category exists if changed
-    let finalCategoryId = categoryId;
-    if (finalCategoryId === undefined) {
-      finalCategoryId = existing.categoryId;
-    } else if (!finalCategoryId) {
-      const defaultCategory = await prisma.scholarshipCategory.upsert({
-        where: { name: "General" },
-        update: {},
-        create: { name: "General" },
+      // Resolve final IDs, falling back to existing values when undefined
+      const finalCountryId = countryId !== undefined ? countryId : existing.countryId;
+      let finalCategoryId = categoryId !== undefined ? categoryId : existing.categoryId;
+      let finalUniversityId = universityId !== undefined ? universityId : existing.universityId;
+
+      // Ensure category exists (create if missing)
+      if (!finalCategoryId) {
+        const defaultCategory = await prisma.scholarshipCategory.upsert({
+          where: { name: "General" },
+          update: {},
+          create: { name: "General" },
+        });
+        finalCategoryId = defaultCategory.id;
+      } else {
+        const catExists = await prisma.scholarshipCategory.findUnique({ where: { id: finalCategoryId } });
+        if (!catExists) {
+          const nameMap: { [key: string]: string } = { "1": "MBBS", "2": "BDS", "3": "PHD" };
+          const catName = nameMap[finalCategoryId] || `Category-${finalCategoryId}`;
+          const created = await prisma.scholarshipCategory.create({ data: { name: catName } });
+          finalCategoryId = created.id;
+        }
+      }
+
+      // Ensure university exists (create if missing)
+      if (!finalUniversityId) {
+        const country = await prisma.country.findUnique({ where: { id: finalCountryId } });
+        const countryName = country?.name || `Country-${finalCountryId}`;
+        const defaultUniName = `Default University (${countryName})`;
+        const defaultUniversity = await prisma.university.upsert({
+          where: { name: defaultUniName },
+          update: {},
+          create: { name: defaultUniName, countryId: finalCountryId },
+        });
+        finalUniversityId = defaultUniversity.id;
+      }
+
+      // Debug log
+      console.log('PUT update payload:', {
+        title,
+        finalCountryId,
+        finalCategoryId,
+        finalUniversityId,
+        deadline,
+        benefits,
+        eligibility,
+        requiredDocuments,
       });
-      finalCategoryId = defaultCategory.id;
-    }
 
-    // Ensure university exists if changed
-    let finalUniversityId = universityId;
-    if (finalUniversityId === undefined) {
-      finalUniversityId = existing.universityId;
-    } else if (!finalUniversityId) {
-      const finalCountryId = countryId ? parseInt(countryId) : existing.countryId;
-      const country = await prisma.country.findUnique({
-        where: { id: finalCountryId },
-      });
-      const countryName = country?.name || `Country-${finalCountryId}`;
-      const defaultUniName = `Default University (${countryName})`;
-      
-      const defaultUniversity = await prisma.university.upsert({
-        where: { name: defaultUniName },
-        update: {},
-        create: {
-          name: defaultUniName,
+      const updated = await prisma.scholarship.update({
+        where: { id },
+        data: {
+          title,
+          description: description || null,
+          deadline: deadline ? new Date(deadline) : null,
+          benefits: benefits || null,
+          eligibility: eligibility || null,
+          requiredDocuments: requiredDocuments || null,
           countryId: finalCountryId,
+          categoryId: finalCategoryId,
+          universityId: finalUniversityId,
         },
+        include: { category: true, university: true, country: true },
       });
-      finalUniversityId = defaultUniversity.id;
+
+      return NextResponse.json(updated, { status: 200 });
+    } catch (error) {
+      console.error("PUT Scholarship Error:", error);
+      return NextResponse.json({ error: "Internal server error", details: (error as any)?.message }, { status: 500 });
     }
-
-    const updated = await prisma.scholarship.update({
-      where: { id },
-      data: {
-        title: title !== undefined ? title : existing.title,
-        description: description !== undefined ? description : existing.description,
-        deadline: deadline !== undefined ? (deadline ? new Date(deadline) : null) : existing.deadline,
-        benefits: benefits !== undefined ? benefits : existing.benefits,
-        eligibility: eligibility !== undefined ? eligibility : existing.eligibility,
-        requiredDocuments: requiredDocuments !== undefined ? requiredDocuments : existing.requiredDocuments,
-        countryId: countryId !== undefined ? parseInt(countryId) : existing.countryId,
-        categoryId: parseInt(finalCategoryId),
-        universityId: parseInt(finalUniversityId),
-      },
-      include: {
-        category: true,
-        university: true,
-        country: true,
-      },
-    });
-
-    return NextResponse.json(updated);
-  } catch (error) {
-    console.error("PUT Scholarship ID Error:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
-}
 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
