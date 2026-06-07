@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import DeleteButton from "./DeleteButton";
 import Head from "next/head";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
@@ -24,14 +25,43 @@ export default async function ScholarshipAlertsPage({
   const selectedRegion = searchParams.region || "All";
 
   const whereClause: any = {};
-  if (selectedRegion !== "All") {
-    whereClause.region = { equals: selectedRegion };
+  const selectedRegions = (searchParams.region ?? "").split(',').filter(Boolean);
+  if (selectedRegions.length > 0) {
+    whereClause.region = { in: selectedRegions };
   }
 
+  // Fetch scholarship alerts
   const alerts = await prisma.scholarshipAlert.findMany({
     where: whereClause,
     orderBy: { createdAt: "desc" },
   });
+
+  // Also fetch scholarships (non‑alert records) matching the same region
+  const scholarshipWhere: any = {};
+  if (selectedRegion !== "All") {
+    scholarshipWhere.region = { equals: selectedRegion };
+  }
+  const scholarships = await prisma.scholarship.findMany({
+    where: scholarshipWhere,
+    orderBy: { createdAt: "desc" },
+    include: { country: true, university: true },
+  });
+
+  // Normalize scholarship records to the alert shape for unified rendering
+  const normalizedScholarships = scholarships.map((s) => ({
+    id: s.id,
+    createdAt: s.createdAt,
+    region: s.country?.name || "",
+    title: s.title,
+    university: s.university?.name ?? "",
+    amount: s.benefits ?? "",
+    isNotified: false,
+  }));
+
+  // Combine alerts and normalized scholarships, newest first
+  const combinedAlerts = [...alerts, ...normalizedScholarships].sort((a, b) =>
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
 
   // Calculate stats
   const totalPending = alerts.filter(a => !a.isNotified).length;
@@ -72,25 +102,35 @@ export default async function ScholarshipAlertsPage({
           {/* Region Tabs */}
           <nav style={{ marginBottom: "2rem" }}>
             <ul style={{ display: "flex", gap: "0.5rem", listStyle: "none", padding: 0, margin: 0 }}>
-              {["All", "Europe", "Russia", "China"].map((region) => (
-                <li key={region}>
-                  <Link
-                    href={`/admin/scholarship-alerts?region=${encodeURIComponent(region)}`}
-                    style={{
-                      display: "inline-block",
-                      padding: "0.5rem 1.5rem",
-                      background: selectedRegion === region ? "var(--primary)" : "var(--surface-2)",
-                      color: selectedRegion === region ? "#fff" : "var(--text-head)",
-                      borderRadius: "20px",
-                      textDecoration: "none",
-                      fontWeight: 600,
-                      fontSize: "0.9rem"
-                    }}
-                  >
-                    {region}
-                  </Link>
-                </li>
-              ))}
+              {["All", "Europe", "Russia", "China"].map((region) => {
+                const currentList = (searchParams.region ?? "").split(',').filter(Boolean);
+                const isSelected = region !== "All" && currentList.includes(region);
+                const newList = region === "All"
+                  ? []
+                  : isSelected
+                    ? currentList.filter((r) => r !== region)
+                    : [...currentList, region];
+                const href = `/admin/scholarship-alerts?region=${encodeURIComponent(newList.join(','))}`;
+                return (
+                  <li key={region}>
+                    <Link
+                      href={href}
+                      style={{
+                        display: "inline-block",
+                        padding: "0.5rem 1.5rem",
+                        background: isSelected || (region === "All" && currentList.length === 0) ? "var(--primary)" : "var(--surface-2)",
+                        color: isSelected || (region === "All" && currentList.length === 0) ? "#fff" : "var(--text-head)",
+                        borderRadius: "20px",
+                        textDecoration: "none",
+                        fontWeight: 600,
+                        fontSize: "0.9rem",
+                      }}
+                    >
+                      {region}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 
@@ -107,14 +147,14 @@ export default async function ScholarshipAlertsPage({
                 </tr>
               </thead>
               <tbody>
-                {alerts.length === 0 ? (
+                {combinedAlerts.length === 0 ? (
                   <tr>
                     <td colSpan={6} style={{ padding: "3rem", textAlign: "center", color: "var(--text-muted)" }}>
                       No incoming scholarships found for {selectedRegion}.
                     </td>
                   </tr>
                 ) : (
-                  alerts.map((alert) => (
+                  combinedAlerts.map((alert) => (
                     <tr key={alert.id} style={{ borderBottom: "1px solid var(--surface-3)" }}>
                       <td style={{ padding: "1rem", color: "var(--text-muted)", fontSize: "0.9rem" }}>
                         {new Date(alert.createdAt).toLocaleDateString()}
@@ -129,37 +169,57 @@ export default async function ScholarshipAlertsPage({
                         {alert.university && <div style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: "0.2rem" }}>{alert.university}</div>}
                       </td>
                       <td style={{ padding: "1rem", color: "var(--text-body)" }}>{alert.amount || "N/A"}</td>
-                      <td style={{ padding: "1rem" }}>
-                        {alert.isNotified ? (
-                          <span style={{ color: "var(--success)", fontWeight: 600, fontSize: "0.85rem", display: "flex", alignItems: "center", gap: "0.25rem" }}>
-                            <span style={{ width: "8px", height: "8px", background: "var(--success)", borderRadius: "50%", display: "inline-block" }}></span>
-                            Sent
-                          </span>
-                        ) : (
-                          <span style={{ color: "var(--warning)", fontWeight: 600, fontSize: "0.85rem", display: "flex", alignItems: "center", gap: "0.25rem" }}>
-                            <span style={{ width: "8px", height: "8px", background: "var(--warning)", borderRadius: "50%", display: "inline-block" }}></span>
-                            Pending
-                          </span>
-                        )}
-                      </td>
-                      <td style={{ padding: "1rem" }}>
-                        {!alert.isNotified && (
-                          <button
+                        <td style={{ padding: "1rem" }}>
+                          {alert.isNotified ? (
+                            <span style={{ color: "var(--success)", fontWeight: 600, fontSize: "0.85rem", display: "flex", alignItems: "center", gap: "0.25rem" }}>
+                              <span style={{ width: "8px", height: "8px", background: "var(--success)", borderRadius: "50%", display: "inline-block" }}></span>
+                              Sent
+                            </span>
+                          ) : (
+                            <span style={{ color: "var(--warning)", fontWeight: 600, fontSize: "0.85rem", display: "flex", alignItems: "center", gap: "0.25rem" }}>
+                              <span style={{ width: "8px", height: "8px", background: "var(--warning)", borderRadius: "50%", display: "inline-block" }}></span>
+                              Pending
+                            </span>
+                          )}
+                        </td>
+                        <td style={{ padding: "1rem" }}>
+                          {/* Action buttons */}
+                          <Link
+                            href={`/admin/scholarship-alerts/view/${alert.id}`}
                             style={{
-                              padding: "0.4rem 0.8rem",
+                              padding: "0.3rem 0.6rem",
+                              marginRight: "0.4rem",
                               background: "var(--primary)",
-                              color: "white",
+                              color: "#000",
                               border: "none",
-                              borderRadius: "6px",
+                              borderRadius: "4px",
                               cursor: "pointer",
-                              fontSize: "0.8rem",
-                              fontWeight: 500,
+                              fontSize: "0.75rem",
+                              textDecoration: "none",
                             }}
                           >
-                            Send Now
-                          </button>
-                        )}
-                      </td>
+                            View
+                          </Link>
+                          {/* Edit button */}
+                          <Link
+                            href={`/admin/scholarship-alerts/edit/${alert.id}`}
+                            style={{
+                              padding: "0.3rem 0.6rem",
+                              marginRight: "0.4rem",
+                              background: "var(--surface-2)",
+                              color: "var(--text-head)",
+                              border: "1px solid var(--surface-3)",
+                              borderRadius: "4px",
+                              cursor: "pointer",
+                              fontSize: "0.75rem",
+                              textDecoration: "none",
+                            }}
+                          >
+                            Edit
+                          </Link>
+                          {/* Delete button */}
+                          <DeleteButton alertId={alert.id} />
+                        </td>
                     </tr>
                   ))
                 )}
