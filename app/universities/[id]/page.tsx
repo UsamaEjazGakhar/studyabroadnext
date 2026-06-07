@@ -4,8 +4,9 @@ import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
 
-export async function generateMetadata({ params }: { params: { id: string } }) {
-  const uniId = Number(params.id);
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const uniId = Number(id);
   if (Number.isNaN(uniId)) return { title: "University Not Found" };
   const uni = await prisma.university.findUnique({ where: { id: uniId }, include: { country: true } });
   if (!uni) return { title: "University Not Found" };
@@ -15,8 +16,9 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
   };
 }
 
-export default async function UniversityPage({ params }: { params: { id: string } }) {
-  const uniId = Number(params.id);
+export default async function UniversityPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const uniId = Number(id);
   if (Number.isNaN(uniId)) return notFound();
 
   const university = await prisma.university.findUnique({
