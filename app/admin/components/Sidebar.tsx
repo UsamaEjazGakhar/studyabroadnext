@@ -16,6 +16,7 @@ const Sidebar = () => {
   const links = [
     { href: "/admin", label: "Dashboard" },
     { href: "/admin/leads", label: "Leads" },
+    { href: "/admin/registrations", label: "Registrations" },
     { href: "/admin/universities", label: "Universities" },
     { href: "/admin/resources", label: "Resources" },
     { href: "/admin/events", label: "Events & Webinars" },

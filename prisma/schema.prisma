@@ -13,8 +13,11 @@ model User {
   email        String    @unique
   passwordHash String
   isApproved   Boolean   @default(false)
+  status            String    @default("Pending") // Pending, Active, Rejected
+  profilePicture    String?   // optional path to uploaded picture
   roleId       Int
   role         Role      @relation(fields: [roleId], references: [id])
+
   student      Student?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
@@ -27,6 +30,7 @@ model User {
   notifications   Notification[]
   serviceRequests ServiceRequest[]
   testimonials    Testimonial[]
+  adminActions    AuditLog[] @relation("AdminActions")
 }
 
 model Role {
@@ -249,30 +253,36 @@ model Appointment {
 }
 
 model Payment {
-  id            Int       @id @default(autoincrement())
-  userId        Int
-  amount        Float
-  method        String
-  status        String
-  transactionId String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  deletedAt     DateTime?
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  month        DateTime // first day of the month for this payment
+  amount       Decimal
+  proofPath    String   // stored file path
+  invoice      String?  // optional invoice number/description
+  status       String   @default("Pending") // Pending, Approved, Rejected
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id])
 }
 
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  adminId   Int
+  admin     User     @relation("AdminActions", fields: [adminId], references: [id])
+  action    String   // e.g., APPROVE_REGISTRATION, REJECT_PAYMENT
+  targetId  Int      // ID of the user or payment affected
+  createdAt DateTime @default(now())
+}
+
 model Document {
-  id         Int       @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
+  uploadedAt DateTime @default(now())
+  deletedAt  DateTime?
   userId     Int?
   studentId  Int?
-  type       String // e.g., CV, Passport, SOP, etc.
-  path       String // relative path in public/uploads
-  uploadedAt DateTime  @default(now())
-  deletedAt  DateTime?
-
-  user    User?    @relation(fields: [userId], references: [id])
-  student Student? @relation(fields: [studentId], references: [id])
+  user       User?    @relation(fields: [userId], references: [id])
+  student    Student? @relation(fields: [studentId], references: [id])
 }
 
 model Testimonial {
