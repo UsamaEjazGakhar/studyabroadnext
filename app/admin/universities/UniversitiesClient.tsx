@@ -145,9 +145,9 @@ export default function UniversitiesClient() {
           </button>
         </div>
         {loading ? (
-          <p style={{ color: "#fff" }}>Loading universities…</p>
+          <p style={{ color: "#000" }}>Loading universities…</p>
         ) : (
-          <table style={{ width: "100%", borderCollapse: "collapse", color: "#fff" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", color: "#000" }}>
             <thead>
               <tr style={{ borderBottom: "2px solid var(--surface-2)" }}>
                 <th style={{ padding: "0.5rem" }}>Date</th>
@@ -201,7 +201,7 @@ export default function UniversitiesClient() {
         {/* View Modal */}
         {modalMode === "view" && selectedUniversity && (
           <Modal onClose={() => setModalMode(null)}>
-            <h2 style={{ color: "#fff", marginBottom: "1rem" }}>University Details</h2>
+            <h2 style={{ color: "#000", marginBottom: "1rem" }}>University Details</h2>
             <div style={{ marginBottom: "0.5rem" }}><strong>Name:</strong> {selectedUniversity.name}</div>
             <div style={{ marginBottom: "0.5rem" }}><strong>Country:</strong> {selectedUniversity.country}</div>
             <div style={{ marginBottom: "0.5rem" }}><strong>Website:</strong> {selectedUniversity.website || "-"}</div>

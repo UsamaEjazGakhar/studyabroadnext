@@ -170,9 +170,9 @@ export default function LeadsClient() {
 
         {/* Leads Table */}
         {loading ? (
-          <p style={{ color: "#fff" }}>Loading leads…</p>
+          <p style={{ color: "#000" }}>Loading leads…</p>
         ) : (
-          <table style={{ width: "100%", borderCollapse: "collapse", color: "#fff" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", color: "#000" }}>
             <thead>
               <tr style={{ borderBottom: "2px solid var(--surface-2)" }}>
                 <th style={{ padding: "0.5rem" }}>Date</th>
@@ -217,7 +217,7 @@ export default function LeadsClient() {
         {/* Modal for Add/Edit */}
         {(modalMode === "add" || modalMode === "edit") && (
           <Modal onClose={() => setModalMode(null)}>
-            <h2 style={{ color: "#fff", marginBottom: "1rem" }}>{modalMode === "edit" ? "Edit Lead" : "Add Lead"}</h2>
+            <h2 style={{ color: "#000", marginBottom: "1rem" }}>{modalMode === "edit" ? "Edit Lead" : "Add Lead"}</h2>
             {error && <p style={{ color: "red" }}>{error}</p>}
             <form onSubmit={handleSubmit} style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
               <input name="name" placeholder="Name" required value={form.name ?? ""} onChange={handleChange} style={{ flex: "1 1 200px", padding: "0.5rem" }} />
@@ -236,7 +236,7 @@ export default function LeadsClient() {
         {/* Modal for View */}
         {modalMode === "view" && selectedLead && (
           <Modal onClose={() => setModalMode(null)}>
-            <h2 style={{ color: "#fff", marginBottom: "1rem" }}>Lead Details</h2>
+            <h2 style={{ color: "#000", marginBottom: "1rem" }}>Lead Details</h2>
             <div style={{ marginBottom: "0.5rem" }}><strong>Name:</strong> {selectedLead.name}</div>
             <div style={{ marginBottom: "0.5rem" }}><strong>Email:</strong> {selectedLead.email}</div>
             <div style={{ marginBottom: "0.5rem" }}><strong>Phone:</strong> {selectedLead.phone || "-"}</div>
@@ -251,11 +251,11 @@ export default function LeadsClient() {
         {/* Modal for Delete confirmation */}
         {deleteId !== null && (
           <Modal onClose={() => setDeleteId(null)}>
-            <h2 style={{ color: "#fff", marginBottom: "1rem" }}>Confirm Delete</h2>
-            <p style={{ color: "#fff" }}>Are you sure you want to delete this lead?</p>
+            <h2 style={{ color: "#000", marginBottom: "1rem" }}>Confirm Delete</h2>
+            <p style={{ color: "#000" }}>Are you sure you want to delete this lead?</p>
             <div style={{ display: "flex", gap: "1rem" }}>
               <button onClick={handleDelete} style={{ background: "#ff6666", color: "#fff", border: "none", padding: "0.5rem 1rem", cursor: "pointer" }}>Yes</button>
-              <button onClick={() => setDeleteId(null)} style={{ background: "transparent", color: "#fff", border: "1px solid #fff", padding: "0.5rem 1rem", cursor: "pointer" }}>No</button>
+              <button onClick={() => setDeleteId(null)} style={{ background: "transparent", color: "#000", border: "1px solid #000", padding: "0.5rem 1rem", cursor: "pointer" }}>No</button>
             </div>
           </Modal>
         )}
