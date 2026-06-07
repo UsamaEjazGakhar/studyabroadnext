@@ -1,4 +1,6 @@
+"use client";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 import React from "react";
 
 /**
@@ -64,6 +66,24 @@ const Sidebar = () => {
             </Link>
           </li>
         </ul>
+        {/* Logout button */}
+        <li style={{ marginTop: "1rem", listStyle: "none" }}>
+          <button
+            onClick={() => signOut({ callbackUrl: "/admin" })}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#ffffff",
+              fontWeight: 500,
+              cursor: "pointer",
+              textDecoration: "none",
+              padding: 0,
+              fontSize: "1rem",
+            }}
+          >
+            Logout
+          </button>
+        </li>
       </nav>
     </aside>
   );

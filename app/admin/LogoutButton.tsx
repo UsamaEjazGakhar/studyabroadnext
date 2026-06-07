@@ -1,11 +1,17 @@
 "use client";
 import React from "react";
 import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function LogoutButton() {
+  const handleLogout = async () => {
+    // Direct redirect after sign out for instant navigation
+    await signOut({ redirect: true, callbackUrl: "/login" });
+  };
+
   return (
     <button 
-      onClick={() => signOut({ callbackUrl: "/login" })}
+      onClick={handleLogout}
       style={{
         padding: "0.5rem 1rem",
         background: "var(--orange)",
