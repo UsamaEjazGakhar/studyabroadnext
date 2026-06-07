@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { universities } from "../store";
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: idStr } = await params;
     const id = parseInt(idStr);
@@ -22,7 +22,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   }
 }
 
-export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: idStr } = await params;
     const id = parseInt(idStr);

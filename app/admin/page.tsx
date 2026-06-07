@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import prisma from "../lib/prisma";
-import Sidebar from "./components/Sidebar";
+
 import LogoutButton from "./LogoutButton";
 
 
@@ -18,9 +18,7 @@ export default async function AdminDashboard() {
   });
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
-      <Sidebar />
-      <main style={{ flex: 1, padding: "2rem", background: "var(--surface-1)" }}>
+    <>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           {/* Header Bar */}
           <div
@@ -121,7 +119,6 @@ export default async function AdminDashboard() {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+    </>
   );
 }

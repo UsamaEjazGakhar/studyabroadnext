@@ -2,9 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 // PUT update lead
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const id = parseInt(params.id);
+    const resolvedParams = await params;
+    const id = parseInt(resolvedParams.id);
     const body = await req.json();
     const { name, email, phone, program, country, education, message } = body;
     const lead = await prisma.consultationLead.update({
@@ -18,9 +19,10 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 }
 
 // DELETE lead
-export async function DELETE(_req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const id = parseInt(params.id);
+    const resolvedParams = await params;
+    const id = parseInt(resolvedParams.id);
     await prisma.consultationLead.delete({ where: { id } });
     return NextResponse.json({ success: true });
   } catch (error) {

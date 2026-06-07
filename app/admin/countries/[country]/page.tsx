@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../../api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
-import Sidebar from "../../components/Sidebar";
+
 import LogoutButton from "../../LogoutButton";
 
 const prisma = new PrismaClient();
@@ -41,7 +41,7 @@ export default async function CountryDashboard({ params }: { params: Promise<{ c
         <meta name="description" content={`Manage scholarships for ${country.name} in the admin dashboard.`} />
       </Head>
       <div style={{ display: "flex" }}>
-        <Sidebar />
+
         <main style={{ flexGrow: 1, padding: "2rem" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
             <h1 style={{ fontSize: "2rem", margin: 0 }}>{country.name} Scholarships</h1>
@@ -112,7 +112,7 @@ export default async function CountryDashboard({ params }: { params: Promise<{ c
                   <p style={{ margin: "0 0 0.5rem 0" }}>{sch.description}</p>
                 )}
                 <Link
-                  href={sch.link ?? "#"}
+                  href="#"
                   style={{ color: "var(--link)", textDecoration: "underline" }}
                 >
                   View Details

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Sidebar from "../components/Sidebar";
+
 import LogoutButton from "../LogoutButton";
 
 function Modal({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
@@ -135,9 +135,7 @@ export default function UniversitiesClient() {
   };
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
-      <Sidebar />
-      <main style={{ flex: 1, padding: "2rem" }}>
+    <>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
           <h2 style={{ background: "#020620ff", color: "#fff", padding: "0.5rem 1rem", borderRadius: "4px", margin: 0, fontSize: "1.5rem", fontWeight: "600" }}>
             University List
@@ -222,7 +220,6 @@ export default function UniversitiesClient() {
             </div>
           </Modal>
         )}
-      </main>
-    </div>
+    </>
   );
 }

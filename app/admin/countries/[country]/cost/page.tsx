@@ -2,23 +2,23 @@ import React from "react";
 import Link from "next/link";
 import Head from "next/head";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { authOptions } from "../../../../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { PrismaClient } from "@prisma/client";
-import Sidebar from "../../components/Sidebar";
-import LogoutButton from "../../LogoutButton";
+
+import LogoutButton from "../../../LogoutButton";
 
 const prisma = new PrismaClient();
 
 export default async function CountryCostPage({ params }: { params: Promise<{ country: string }> }) {
   const session = await getServerSession(authOptions);
-  if (!session || session.user.role !== "Admin") {
+  if (!session || (session.user as any).role !== "Admin") {
     redirect("/login");
   }
 
   const resolvedParams = await params;
   const country = await prisma.country.findUnique({
-    where: { name: { equals: resolvedParams.country } },
+    where: { name: resolvedParams.country },
     select: { name: true, createdAt: true },
   });
 
@@ -26,7 +26,7 @@ export default async function CountryCostPage({ params }: { params: Promise<{ co
     return (
       <div style={{ padding: "2rem" }}>
         <h1>Country Not Found</h1>
-        <p>No data available for {params.country}.</p>
+        <p>No data available for {resolvedParams.country}.</p>
         <Link href="/admin">← Back to Dashboard</Link>
       </div>
     );
@@ -38,9 +38,7 @@ export default async function CountryCostPage({ params }: { params: Promise<{ co
         <title>{country.name} – Cost Breakdown</title>
         <meta name="description" content={`Cost breakdown details for ${country.name}.`} />
       </Head>
-      <div style={{ display: "flex" }}>
-        <Sidebar />
-        <main style={{ flexGrow: 1, padding: "2rem" }}>
+      <>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
             <h1 style={{ fontSize: "2rem", margin: 0 }}>{country.name} – Cost Breakdown</h1>
             <LogoutButton />
@@ -54,8 +52,7 @@ export default async function CountryCostPage({ params }: { params: Promise<{ co
             <li>Other Fees: <strong>Data pending</strong></li>
           </ul>
           <Link href={`/admin/countries/${resolvedParams.country}`} style={{ color: "var(--link)" }}>← Back to Overview</Link>
-        </main>
-      </div>
+      </>
     </>
   );
 }

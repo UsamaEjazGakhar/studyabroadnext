@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
-import Sidebar from "../components/Sidebar";
+
 import LogoutButton from "../LogoutButton";
 
 const prisma = new PrismaClient();
@@ -14,9 +14,7 @@ export default async function AdminSettings() {
   }
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
-      <Sidebar />
-      <main style={{ flex: 1, padding: "2rem", background: "var(--surface-1)" }}>
+    <>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
             <h1 style={{ fontFamily: "var(--font-head)", color: "var(--navy)", fontSize: "2rem" }}>Settings</h1>
@@ -29,7 +27,6 @@ export default async function AdminSettings() {
             This is a placeholder for future admin settings. Add configuration options here.
           </p>
         </div>
-      </main>
-    </div>
+    </>
   );
 }

@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { PrismaClient } from "@prisma/client";
-import Sidebar from "../components/Sidebar";
+
 import LogoutButton from "../LogoutButton";
 
 const prisma = new PrismaClient();
@@ -46,9 +46,7 @@ export default async function AdminBlogPage({
       <Head>
         <title>Blog & SEO Content – Admin</title>
       </Head>
-      <div style={{ display: "flex", minHeight: "100vh" }}>
-        <Sidebar />
-        <main style={{ flexGrow: 1, padding: "2rem", background: "var(--surface-1)" }}>
+      <>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
             <div>
               <h1 style={{ fontSize: "2rem", margin: 0, color: "var(--navy)" }}>Blog & SEO Articles</h1>
@@ -210,8 +208,7 @@ export default async function AdminBlogPage({
               </tbody>
             </table>
           </div>
-        </main>
-      </div>
+      </>
     </>
   );
 }

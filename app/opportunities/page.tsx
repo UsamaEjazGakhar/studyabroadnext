@@ -83,8 +83,7 @@ export default async function OpportunitiesPage() {
                     {s.deadline && <span style={{ fontSize: "0.75rem", color: "#94a3b8" }}>Due: {new Date(s.deadline).toLocaleDateString()}</span>}
                   </div>
                   <h3 style={{ margin: "0 0 0.5rem 0", fontSize: "1rem", fontWeight: 600, color: "var(--navy)" }}>{s.title}</h3>
-                  {s.amount && <p style={{ color: "#059669", fontWeight: 600, margin: "0 0 0.5rem 0" }}>{s.amount}</p>}
-                  <a href={s.link || "#"} target="_blank" rel="noopener noreferrer" style={{ color: "var(--teal)", fontWeight: 600, textDecoration: "none", fontSize: "0.9rem" }}>
+                  <a href="#" target="_blank" rel="noopener noreferrer" style={{ color: "var(--teal)", fontWeight: 600, textDecoration: "none", fontSize: "0.9rem" }}>
                     View Details →
                   </a>
                 </div>
