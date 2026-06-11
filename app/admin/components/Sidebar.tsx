@@ -34,7 +34,8 @@ const Sidebar = () => {
         background: "#020620ff",
         padding: "2rem 1.5rem 1.5rem 1.5rem",
         borderRight: "1px solid var(--surface-3)",
-        minHeight: "100vh",
+        height: "100vh",
+        overflowY: "auto",
         boxSizing: "border-box",
       }}
     >
