@@ -1,8 +1,10 @@
 "use client";
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Header: React.FC = () => {
+  const pathname = usePathname();
   return (
     <header id="header">
       <div className="navbar">
@@ -20,7 +22,9 @@ const Header: React.FC = () => {
           <a href="https://wa.me/923001234567" className="btn btn-ghost">
             <i className="fab fa-whatsapp" /> WhatsApp
           </a>
-          <a href="#consultation" className="btn btn-primary btn-sm">Apply Now</a>
+          {pathname !== "/login" && (
+            <a href="#consultation" className="btn btn-primary btn-sm">Apply Now</a>
+          )}
           <Link href="/login" className="btn btn-primary" style={{ padding: "0.5rem 1rem", fontSize: "0.9rem" }}>Login</Link>
           <button className="menu-toggle" id="menu-toggle" aria-label="Toggle menu">
             <i className="fas fa-bars"></i>

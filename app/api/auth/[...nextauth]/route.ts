@@ -45,10 +45,10 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        // Removed isApproved check as the field does not exist in the User model
-        // if (!user.isApproved) {
-        //   return null; // or throw an error message
-        // }
+          // Block non‑admin users whose account is not active
+          if (user.role?.name !== 'Admin' && user.status !== 'Active') {
+            throw new Error('Pending approval');
+          }
 
         const isPasswordValid = await bcrypt.compare(credentials.password, user.passwordHash);
 

@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
   const newStatus = action === "approve" ? "Active" : "Rejected";
   await prisma.user.update({
     where: { id: Number(userId) },
-    data: { status: newStatus },
+    data: { status: newStatus, ...(action === "approve" ? { isApproved: true } : { isApproved: false }) },
   });
 
   // log audit

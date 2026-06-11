@@ -29,7 +29,7 @@ export async function POST(request: Request) {
         email,
         passwordHash,
         roleId: userRole.id,
-        isApproved: true,
+        isApproved: false,
       },
     });
     return NextResponse.json({ message: 'User registered', userId: user.id }, { status: 201 });

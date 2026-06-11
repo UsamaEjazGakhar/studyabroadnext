@@ -5,7 +5,11 @@ import { prisma } from "@/lib/prisma";
 
 // Get all universities
 export async function GET() {
-  const data = await prisma.university.findMany();
+  const data = await prisma.university.findMany({
+    include: {
+      country: true,
+    },
+  });
   return NextResponse.json(data);
 }
 

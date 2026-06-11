@@ -17,6 +17,8 @@ model User {
   profilePicture    String?   // optional path to uploaded picture
   roleId       Int
   role         Role      @relation(fields: [roleId], references: [id])
+  categoryId   Int?      // optional scholarship category selected at registration
+  category     ScholarshipCategory? @relation(fields: [categoryId], references: [id])
 
   student      Student?
   createdAt    DateTime  @default(now())
@@ -105,6 +107,7 @@ model ScholarshipCategory {
   id           Int           @id @default(autoincrement())
   name         String        @unique
   scholarships Scholarship[]
+  users        User[]
 }
 
 model University {

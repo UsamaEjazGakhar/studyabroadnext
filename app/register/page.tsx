@@ -1,7 +1,7 @@
 // Updated register page with file uploads and proper API endpoint
 "use client";
 import React, { useState } from "react";
-import Header from "../components/Header";
+
 import { useRouter } from "next/navigation";
 
 export default function Register() {
@@ -15,6 +15,8 @@ export default function Register() {
   const [paymentProof, setPaymentProof] = useState<File | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [categoryId, setCategoryId] = useState('');
+  const [modalConfig, setModalConfig] = useState({ show: false, type: "success", message: "" });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +35,7 @@ export default function Register() {
     }
     setLoading(true);
     try {
+      const startTime = performance.now();
       const formData = new FormData();
       formData.append("email", email);
       formData.append("password", password);
@@ -40,17 +43,20 @@ export default function Register() {
       formData.append("lastName", lastName);
       formData.append("profilePic", profilePic);
       formData.append("paymentProof", paymentProof);
+      formData.append("categoryId", categoryId);
 
       const res = await fetch("/api/register", {
         method: "POST",
         body: formData,
       });
       const data = await res.json();
+      const duration = Math.round(performance.now() - startTime);
+      const baseMessage = !res.ok ? (data.message || data.error || "Registration failed") : "Your account has been successfully created and is currently pending admin approval. You will receive an email once it is approved.";
+      const fullMessage = `${baseMessage} Ready in ${duration}ms`;
       if (!res.ok) {
-        setError(data.message || data.error || "Registration failed");
+        setModalConfig({ show: true, type: "error", message: fullMessage });
       } else {
-        // after successful registration, redirect to login
-        router.push("/login");
+        setModalConfig({ show: true, type: "success", message: fullMessage });
       }
     } catch (e) {
       setError("Network error");
@@ -60,11 +66,10 @@ export default function Register() {
 
   return (
     <>
-      <Header />
+
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "var(--surface-1)" }}>
         <div style={{ background: "#fff", padding: "2rem", borderRadius: "14px", boxShadow: "var(--sh-md)", width: "100%", maxWidth: "400px" }}>
           <h2 style={{ fontFamily: "var(--font-head)", marginBottom: "1.5rem", textAlign: "center", color: "var(--navy)" }}>Create Account</h2>
-          {error && <p style={{ color: "red", fontSize: "0.9rem", marginBottom: "1rem", textAlign: "center" }}>{error}</p>}
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }} encType="multipart/form-data">
             <div className="fg">
               <label>First Name</label>
@@ -93,6 +98,13 @@ export default function Register() {
             <div className="fg">
               <label>Payment Proof</label>
               <input type="file" accept="image/*" onChange={e => setPaymentProof(e.target.files?.[0] || null)} required />
+                <label>Category</label>
+                <select name="categoryId" value={categoryId} onChange={e => setCategoryId(e.target.value)} required>
+                  <option value="" disabled>Select a category</option>
+                  <option value="1">MBBS</option>
+                  <option value="2">BDS</option>
+                  <option value="3">PHD</option>
+                </select>
             </div>
             <button type="submit" className="btn btn-primary" disabled={loading} style={{ justifyContent: "center" }}>
               {loading ? "Registering..." : "Register"}
@@ -104,6 +116,45 @@ export default function Register() {
           </div>
         </div>
       </div>
+
+      {modalConfig.show && (
+        <div style={{
+          position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh",
+          backgroundColor: "rgba(0,0,0,0.6)", display: "flex", alignItems: "center",
+          justifyContent: "center", zIndex: 1000
+        }}>
+          <div style={{
+            background: "#fff", padding: "2rem", borderRadius: "12px", 
+            textAlign: "center", maxWidth: "400px", width: "90%",
+            boxShadow: "0 10px 25px rgba(0,0,0,0.2)"
+          }}>
+            <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>
+              {modalConfig.type === "success" ? "✅" : "❌"}
+            </div>
+            <h2 style={{ color: modalConfig.type === "success" ? "var(--navy)" : "#d32f2f", marginBottom: "1rem" }}>
+              {modalConfig.type === "success" ? "Registration Successful!" : "Registration Failed"}
+            </h2>
+            <p style={{ color: "#555", marginBottom: "1.5rem" }}>{modalConfig.message}</p>
+            {modalConfig.type === "success" ? (
+              <button 
+                onClick={() => router.push("/login")}
+                className="btn btn-primary"
+                style={{ width: "100%", justifyContent: "center" }}
+              >
+                Proceed to Login
+              </button>
+            ) : (
+              <button 
+                onClick={() => setModalConfig({ ...modalConfig, show: false })}
+                className="btn btn-primary"
+                style={{ width: "100%", justifyContent: "center", background: "#d32f2f" }}
+              >
+                Close
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 }

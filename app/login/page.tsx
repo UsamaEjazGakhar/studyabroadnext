@@ -22,7 +22,11 @@ export default function Login() {
     });
 
     if (res?.error) {
-      setError("Invalid credentials");
+      if (res.error?.includes('Pending approval')) {
+        setError('Your account is pending admin approval. Please wait for activation.');
+      } else {
+        setError('Invalid credentials');
+      }
       setLoading(false);
     } else {
       const session = await getSession();

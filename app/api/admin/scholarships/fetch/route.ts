@@ -14,7 +14,8 @@ export async function POST(request: Request) {
       {
         title: `Fully Funded Excellence Scholarship 2026 - ${region}`,
         region: region,
-        university: `Top University in ${region}`,
+        universityId: 1, // Placeholder ID
+        countryId: 1,    // Placeholder ID
         amount: "$20,000 / year",
         deadline: new Date(new Date().setMonth(new Date().getMonth() + 3)),
         link: "https://example.com/apply",
@@ -23,7 +24,8 @@ export async function POST(request: Request) {
       {
         title: `Research Grant for International Students - ${region}`,
         region: region,
-        university: `Institute of Technology, ${region}`,
+        universityId: 1, // Placeholder ID
+        countryId: 1,    // Placeholder ID
         amount: "€1,200 / month",
         deadline: new Date(new Date().setMonth(new Date().getMonth() + 1)),
         link: "https://example.com/research",
@@ -33,8 +35,7 @@ export async function POST(request: Request) {
 
     const createdAlerts = [];
     for (const alert of liveAlerts) {
-      // @ts-ignore
-    const newAlert = await prisma.scholarshipAlert.create({
+      const newAlert = await prisma.scholarshipAlert.create({
         data: alert,
       });
       createdAlerts.push(newAlert);
@@ -61,7 +62,7 @@ export async function POST(request: Request) {
             <h2>New Scholarships Detected in ${region}</h2>
             <p>Our AI tracking system has found new scholarship opportunities:</p>
             <ul>
-              ${createdAlerts.map(a => `<li><strong>${a.title}</strong> at ${a.university} - ${a.amount}</li>`).join('')}
+              ${createdAlerts.map(a => `<li><strong>${a.title}</strong> at University ID ${a.universityId} - ${a.amount}</li>`).join('')}
             </ul>
             <p>Please log in to the admin dashboard to review them.</p>
           `,
@@ -70,8 +71,7 @@ export async function POST(request: Request) {
         await transporter.sendMail(mailOptions);
         
         // Mark as notified
-        // @ts-ignore
-    await prisma.scholarshipAlert.updateMany({
+        await prisma.scholarshipAlert.updateMany({
           where: { id: { in: createdAlerts.map(a => a.id) } },
           data: { isNotified: true }
         });
