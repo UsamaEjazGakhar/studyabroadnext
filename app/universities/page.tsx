@@ -86,15 +86,26 @@ export default function UniversitiesPage() {
           <p>Loading universities...</p>
         ) : (
           <div className="grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1.5rem" }}>
-            {universities.map(u => (
-              <div key={u.id} style={cardStyle}>
-                <h3 style={{ margin: "0 0 0.5rem 0", color: "var(--navy)" }}>{u.name}</h3>
-                <p style={{ margin: "0 0 0.3rem 0", color: "var(--text-muted)" }}>Country: {u.country.name}</p>
-                {u.ranking && <p style={{ margin: "0 0 0.3rem 0", color: "var(--text-muted)" }}>Ranking: #{u.ranking}</p>}
-                {u.tuitionFees && <p style={{ margin: "0 0 0.3rem 0", color: "var(--text-muted)" }}>Tuition: {u.tuitionFees}</p>}
-                {u.programs && <p style={{ margin: "0 0 0.3rem 0", color: "var(--text-muted)" }}>Programs: {u.programs}</p>}
-              </div>
-            ))}
+            {universities.map(u =>                <div key={u.id} style={cardStyle}>
+                  <h3 style={{ margin: "0 0 0.5rem 0", color: "var(--navy)" }}>{u.name}</h3>
+                  {/* Scholarships link */}
+                  {u.scholarships && u.scholarships.length > 0 && (
+                    <p style={{ margin: "0 0 0.3rem 0", color: "var(--text-muted)" }}>
+                      Scholarships: {u.scholarships.map(s => s.title).join(", ")}
+                    </p>
+                  )}
+                  {/* Website link */}
+                  {u.website && (
+                    <p style={{ margin: "0 0 0.3rem 0" }}>
+                      <a href={u.website} target="_blank" rel="noopener noreferrer" style={{ color: "var(--primary)" }}>Visit Website</a>
+                    </p>
+                  )}
+                  {/* WhatsApp contact icon */}
+                  <a href="https://wa.me/923331165573" target="_blank" rel="noopener noreferrer" style={{ display: "inline-block", marginTop: "0.5rem" }}>
+                    <img src="/whatsapp-icon.png" alt="WhatsApp" style={{ width: "24px", height: "24px" }} />
+                  </a>
+                </div>
+            )}
           </div>
         )}
       </main>
