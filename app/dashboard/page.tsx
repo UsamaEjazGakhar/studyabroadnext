@@ -5,8 +5,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 /**
  * Simple user dashboard – displayed after a successful login for non‑admin users.
- * It uses a clean glass‑morphism card with a modern gradient background and
- * subtle hover animations to match the premium look of the rest of the app.
+ * Uses a clean white background with minimal styling.
  */
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
@@ -19,22 +18,19 @@ export default async function Dashboard() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background:
-          "linear-gradient(135deg, hsl(210, 30%, 12%), hsl(210, 30%, 18%))",
+        background: "#ffffff",
         padding: "2rem",
       }}
     >
       <section
         style={{
-          background: "rgba(255, 255, 255, 0.12)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
+          background: "#ffffff",
           borderRadius: "var(--r-md)",
           boxShadow: "var(--sh-lg)",
           padding: "2rem 3rem",
           maxWidth: "600px",
           width: "100%",
-          color: "#fff",
+          color: "#000000",
           textAlign: "center",
         }}
       >
