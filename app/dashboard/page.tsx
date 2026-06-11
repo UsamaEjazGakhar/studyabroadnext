@@ -1,13 +1,17 @@
-"use client";
 // app/dashboard/page.tsx
 import React from "react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 /**
  * Simple user dashboard – displayed after a successful login for non‑admin users.
  * It uses a clean glass‑morphism card with a modern gradient background and
  * subtle hover animations to match the premium look of the rest of the app.
  */
-export default function Dashboard() {
+export default async function Dashboard() {
+  const session = await getServerSession(authOptions);
+  const userName = session?.user?.name || session?.user?.email?.split("@")[0] || "User";
+
   return (
     <main
       style={{
@@ -34,38 +38,12 @@ export default function Dashboard() {
           textAlign: "center",
         }}
       >
-        <h1
-          style={{
-            fontFamily: "'Inter', sans-serif",
-            fontSize: "2rem",
-            marginBottom: "1rem",
-          }}
-        >
-          🎉 Welcome to Your Dashboard!
+        <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: "2rem", marginBottom: "1rem" }}>
+          🎉 Welcome, {userName}!
         </h1>
         <p style={{ marginBottom: "2rem", lineHeight: 1.5 }}>
-          You have successfully logged in. From here you can explore the
-          features available to regular users—view your profile, manage
-          applications, and more.
+          Explore the features available to registered users.
         </p>
-        <button
-          onClick={() => (window.location.href = "/")}
-          style={{
-            padding: "0.75rem 1.5rem",
-            border: "none",
-            borderRadius: "0.5rem",
-            background:
-              "linear-gradient(90deg, hsl(200, 70%, 45%), hsl(200, 70%, 55%))",
-            color: "#fff",
-            fontSize: "1rem",
-            cursor: "pointer",
-            transition: "transform 0.2s ease",
-          }}
-          onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.05)")}
-          onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
-        >
-          Go to Home
-        </button>
       </section>
     </main>
   );

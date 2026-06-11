@@ -7,27 +7,23 @@ export default function LogoutButton() {
   const router = useRouter();
 
   const handleLogout = () => {
-    // Fire signOut without waiting for response for instant navigation
     signOut({ redirect: false });
     router.replace('/login');
   };
 
   return (
-    <button 
+    <button
       onClick={handleLogout}
       style={{
-        padding: "0.5rem 1rem",
-        background: "var(--orange)",
+        padding: 0,
+        background: "transparent",
         color: "#fff",
         border: "none",
-        borderRadius: "var(--r-pill)",
-        fontSize: "0.9rem",
-        fontWeight: "600",
+        fontSize: "1.5rem",
+        fontWeight: "bold",
         cursor: "pointer",
-        transition: "opacity 0.2s"
+        textAlign: "left",
       }}
-      onMouseOver={(e) => e.currentTarget.style.opacity = "0.8"}
-      onMouseOut={(e) => e.currentTarget.style.opacity = "1"}
     >
       Logout
     </button>
