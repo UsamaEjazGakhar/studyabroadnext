@@ -93,7 +93,7 @@ const AddScholarshipModal: React.FC<AddScholarshipModalProps> = ({ countryId, un
       <style jsx>{`
         .add-scholarship-btn {
           background: var(--primary);
-          color: #fff;
+          color: #000;
           border: none;
           padding: 0.5rem 1rem;
           border-radius: 8px;
