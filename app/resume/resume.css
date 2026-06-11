@@ -1,0 +1,182 @@
+:root {
+  --primary: #2563eb;
+  --border: #d9d9d9;
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --text: #222;
+  --muted: #666;
+  --radius: 10px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background: var(--bg);
+  padding: 25px;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 20px;
+}
+
+.panel {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .08);
+}
+
+.resume {
+  background: white;
+  padding: 45px;
+  min-height: 1100px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .08);
+}
+
+h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 12px;
+  margin-bottom: 5px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+button {
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.primary {
+  background: var(--primary);
+  color: white;
+}
+
+.secondary {
+  background: #444;
+  color: white;
+}
+
+.resume-name {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111;
+}
+
+.resume-role {
+  font-size: 15px;
+  margin-top: 5px;
+  color: #444;
+}
+
+.contact {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #555;
+}
+
+.section {
+  margin-top: 25px;
+}
+
+.section h3 {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+.entry {
+  margin-bottom: 15px;
+}
+
+.entry-title {
+  font-weight: 700;
+}
+
+.entry-sub {
+  font-size: 13px;
+  color: #666;
+}
+
+.entry-desc {
+  margin-top: 5px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.repeat-box {
+  border: 1px dashed #ccc;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
+@media (max-width: 900px) {
+  .wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  body {
+    background: white;
+  }
+  .panel {
+    display: none;
+  }
+  .sidebar {
+    display: none;
+  }
+  .resume {
+    box-shadow: none;
+    padding: 20px;
+  }
+}
+
+.dark {
+  background: #111;
+  color: white;
+}
+
+.dark .panel {
+  background: #1e1e1e;
+  color: white;
+}
+
+.dark .resume {
+  background: #222;
+  color: white;
+}

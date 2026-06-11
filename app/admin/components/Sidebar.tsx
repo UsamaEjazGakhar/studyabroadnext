@@ -18,12 +18,9 @@ const Sidebar = () => {
     { href: "/admin/leads", label: "Leads" },
     { href: "/admin/registrations", label: "Registrations" },
     { href: "/admin/universities", label: "Universities" },
-    { href: "/admin/resources", label: "Resources" },
-    { href: "/admin/events", label: "Events & Webinars" },
     { href: "/admin/tools", label: "Free Tools" },
     { href: "/admin/scholarship-alerts", label: "Scholarship Alerts" },
     { href: "/admin/ai-features", label: "AI Features" },
-    { href: "/admin/blog", label: "Blog & SEO" },
     { href: "/admin/settings", label: "Settings" },
   ];
 
@@ -34,6 +31,8 @@ const Sidebar = () => {
         background: "#020620ff",
         padding: "2rem 1.5rem 1.5rem 1.5rem",
         borderRight: "1px solid var(--surface-3)",
+        position: "sticky",
+        top: 0,
         height: "100vh",
         overflowY: "auto",
         boxSizing: "border-box",
