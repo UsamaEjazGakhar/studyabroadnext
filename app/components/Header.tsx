@@ -12,16 +12,11 @@ const Header: React.FC = () => {
         <nav className="nav-links" id="nav-links">
           <a href="/">Home</a>
           <a href="#programs">Programs</a>
-          <a href="/universities">Universities</a>
           <a href="/opportunities">Opportunities</a>
-          <a href="/blog">Blog</a>
           <a href="#services">Services</a>
           <a href="#contact">Contact</a>
         </nav>
         <div className="nav-cta" style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
-          <a href="https://wa.me/923001234567" className="btn btn-ghost">
-            <i className="fab fa-whatsapp" /> WhatsApp
-          </a>
           {pathname !== "/login" && (
             <a href="#consultation" className="btn btn-primary btn-sm">Apply Now</a>
           )}

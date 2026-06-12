@@ -51,8 +51,8 @@ const Footer: React.FC = () => {
       </div>
       
       {/* Floating WhatsApp */}
-      <a href="https://wa.me/923001234567?text=Hi%20StudyVerse!%20I%20want%20to%20inquire%20about%20your%20services" className="wa-btn" aria-label="Chat on WhatsApp">
-          <i className="fab fa-whatsapp"></i>
+      <a href="https://wa.me/923331165573?text=Hi%20StudyVerse!%20I%20want%20to%20inquire%20about%20your%20services" className="wa-btn" aria-label="Chat on WhatsApp" target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "0" }}>
+          <img src="/whatsapp-icon-free-png.webp" alt="WhatsApp" style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover" }} />
       </a>
     </footer>
   );

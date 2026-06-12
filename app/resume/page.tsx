@@ -224,10 +224,38 @@ export default function RequestResumePage() {
               <div style={{ fontSize: '20px', fontWeight: 800, color: '#0B1C3A', marginTop: '2px' }}>500 PKR</div>
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '12px', fontWeight: 600, color: '#4a5e78', textTransform: 'uppercase' }}>Easypaisa Account</div>
-              <div style={{ fontSize: '16px', fontWeight: 700, color: '#009E8C', marginTop: '2px' }}>+92 333 1165573</div>
+              <div style={{ fontSize: '12px', fontWeight: 600, color: '#4a5e78', textTransform: 'uppercase' }}>EasyPaisa Account</div>
+              <div style={{ fontSize: '16px', fontWeight: 700, color: '#009E8C', marginTop: '2px' }}>03070011118</div>
             </div>
           </div>
+          
+          <div style={{ 
+            textAlign: 'center', 
+            fontWeight: 'bold', 
+            color: '#4a5e78', 
+            fontSize: '14px', 
+            margin: '4px 0',
+            position: 'relative'
+          }}>
+            <span style={{ background: '#f8fafc', padding: '0 10px', zIndex: 1, position: 'relative' }}>OR</span>
+            <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, borderTop: '1px solid #e2e8f0', zIndex: 0 }}></div>
+          </div>
+
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '12px', fontWeight: 600, color: '#4a5e78', textTransform: 'uppercase', marginBottom: '6px' }}>NayaPay (Scan to Pay)</div>
+            <img 
+              src="/qrnayapay.jpg" 
+              alt="NayaPay QR Code" 
+              style={{ 
+                maxWidth: '200px', 
+                height: 'auto', 
+                borderRadius: '8px', 
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                display: 'inline-block' 
+              }} 
+            />
+          </div>
+
           <div style={{
             fontSize: '12.5px',
             color: '#5a718e',
@@ -235,7 +263,7 @@ export default function RequestResumePage() {
             borderTop: '1px solid #e2e8f0',
             paddingTop: '10px'
           }}>
-            Please send exactly <strong>500 PKR</strong> to the Easypaisa number above, and upload a screenshot or document of the transaction receipt below.
+            Please send exactly <strong>500 PKR</strong> to the EasyPaisa account number above or scan the NayaPay QR code, and upload a screenshot or document of the transaction receipt below.
           </div>
         </div>
 
