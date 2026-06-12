@@ -1,130 +1,235 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './resume.css';
 
-// Define data structures for each dynamic section
-interface Experience {
-  company: string;
+interface Section {
+  id: string;
   title: string;
-  duration: string;
-  responsibilities: string;
-}
-interface Education {
-  degree: string;
-  institute: string;
-  duration: string;
-}
-interface Project {
-  name: string;
-  technology: string;
-  description: string;
-}
-interface Certification {
-  cert: string;
-  issuer: string;
-  year: string;
+  type: 'text' | 'experience' | 'education' | 'project' | 'certification';
+  content: string;
+  items: any[];
 }
 
-// Generic helper to update an item in an array state
-function updateArrayItem<T>(
-  setter: React.Dispatch<React.SetStateAction<T[]>>,
-  array: T[],
-  index: number,
-  field: keyof T,
-  value: T[keyof T]
-) {
-  const newArr = [...array];
-  newArr[index] = { ...newArr[index], [field]: value } as T;
-  setter(newArr);
+interface ContactLink {
+  id: string;
+  label: string;
+  value: string;
 }
 
 export default function ResumePage() {
-  // Basic personal info states
-  const [region, setRegion] = useState('USA / Canada / UK / Australia');
-  const [role, setRole] = useState('Software Engineer');
+  // Basic personal details (start blank, no mock data)
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [location, setLocation] = useState('');
-  const [linkedin, setLinkedin] = useState('');
-  const [github, setGithub] = useState('');
-  const [portfolio, setPortfolio] = useState('');
-  const [summary, setSummary] = useState('');
-  const [skills, setSkills] = useState('');
-  const [languages, setLanguages] = useState('');
+  const [region, setRegion] = useState('USA / Canada / UK / Australia');
+  const [role, setRole] = useState('Software Engineer');
 
-  // Dynamic sections state arrays
-  const [experiences, setExperiences] = useState<Experience[]>([
-    { company: '', title: '', duration: '', responsibilities: '' },
-  ]);
-  const [educations, setEducations] = useState<Education[]>([
-    { degree: '', institute: '', duration: '' },
-  ]);
-  const [projects, setProjects] = useState<Project[]>([
-    { name: '', technology: '', description: '' },
-  ]);
-  const [certifications, setCertifications] = useState<Certification[]>([
-    { cert: '', issuer: '', year: '' },
+  // Dynamic Contact Links (LinkedIn, GitHub, Portfolio - start editable & deletable)
+  const [contactLinks, setContactLinks] = useState<ContactLink[]>([
+    { id: 'linkedin', label: 'LinkedIn', value: '' },
+    { id: 'github', label: 'GitHub', value: '' },
+    { id: 'portfolio', label: 'Portfolio', value: '' }
   ]);
 
-  // Add new empty items
-  const addExperience = () =>
-    setExperiences([...experiences, { company: '', title: '', duration: '', responsibilities: '' }]);
-  const addEducation = () =>
-    setEducations([...educations, { degree: '', institute: '', duration: '' }]);
-  const addProject = () =>
-    setProjects([...projects, { name: '', technology: '', description: '' }]);
-  const addCertification = () =>
-    setCertifications([...certifications, { cert: '', issuer: '', year: '' }]);
+  // Default clean sections list (no mock data, each list section starts with 1 empty item so user can type directly)
+  const [sections, setSections] = useState<Section[]>([
+    {
+      id: 'summary',
+      title: 'Professional Summary',
+      type: 'text',
+      content: '',
+      items: []
+    },
+    {
+      id: 'skills',
+      title: 'Core Skills',
+      type: 'text',
+      content: '',
+      items: []
+    },
+    {
+      id: 'experience',
+      title: 'Professional Experience',
+      type: 'experience',
+      content: '',
+      items: [{ company: '', title: '', duration: '', responsibilities: '' }]
+    },
+    {
+      id: 'projects',
+      title: 'Projects',
+      type: 'project',
+      content: '',
+      items: [{ name: '', technology: '', description: '' }]
+    },
+    {
+      id: 'education',
+      title: 'Education',
+      type: 'education',
+      content: '',
+      items: [{ degree: '', institute: '', duration: '' }]
+    },
+    {
+      id: 'certifications',
+      title: 'Certifications',
+      type: 'certification',
+      content: '',
+      items: [{ cert: '', issuer: '', year: '' }]
+    },
+    {
+      id: 'languages',
+      title: 'Languages',
+      type: 'text',
+      content: '',
+      items: []
+    }
+  ]);
 
-  // Delete helpers
-  const removeExperience = (idx: number) =>
-    setExperiences(experiences.filter((_, i) => i !== idx));
-  const removeEducation = (idx: number) =>
-    setEducations(educations.filter((_, i) => i !== idx));
-  const removeProject = (idx: number) =>
-    setProjects(projects.filter((_, i) => i !== idx));
-  const removeCertification = (idx: number) =>
-    setCertifications(certifications.filter((_, i) => i !== idx));
+  // ─── Contact Link Handlers ─────────────────────────────────────
+  const renameContactLink = (id: string, newLabel: string) => {
+    setContactLinks(prev =>
+      prev.map(link => (link.id === id ? { ...link, label: newLabel } : link))
+    );
+  };
 
-const generateResume = () => {
-  // Placeholder for future resume generation logic.
-};
+  const updateContactLinkValue = (id: string, value: string) => {
+    setContactLinks(prev =>
+      prev.map(link => (link.id === id ? { ...link, value } : link))
+    );
+  };
 
-// Print only the resume content without browser URL/header
-const printResume = () => {
-  const resumeElement = document.getElementById('resume');
-  if (!resumeElement) return;
-  const newWindow = window.open('', '_blank', 'width=800,height=600');
-  if (newWindow) {
-    const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
-      .map(node => node.outerHTML)
-      .join('');
-    newWindow.document.write(`<!DOCTYPE html><html><head><title></title>${styles}</head><body>${resumeElement.outerHTML}</body></html>`);
-    newWindow.document.close();
-    newWindow.focus();
-    newWindow.print();
-    newWindow.close();
-  }
-};
+  const removeContactLink = (id: string) => {
+    setContactLinks(prev => prev.filter(link => link.id !== id));
+  };
 
-const printButton = () => window.print();
+  const addContactLink = () => {
+    const id = `link_${Date.now()}`;
+    setContactLinks(prev => [...prev, { id, label: 'Custom Link', value: '' }]);
+  };
+
+  // ─── Section Handlers ──────────────────────────────────────────
+  const renameSection = (id: string, newTitle: string) => {
+    setSections(prev =>
+      prev.map(sec => (sec.id === id ? { ...sec, title: newTitle } : sec))
+    );
+  };
+
+  const removeSection = (id: string) => {
+    setSections(prev => prev.filter(sec => sec.id !== id));
+  };
+
+  const addCustomSection = (type: 'text' | 'experience' | 'education' | 'project' | 'certification') => {
+    const id = `custom_${Date.now()}`;
+    let defaultTitle = 'New Section';
+    let defaultItems: any[] = [];
+
+    if (type === 'experience') {
+      defaultTitle = 'Experience Section';
+      defaultItems = [{ company: '', title: '', duration: '', responsibilities: '' }];
+    } else if (type === 'education') {
+      defaultTitle = 'Education Section';
+      defaultItems = [{ degree: '', institute: '', duration: '' }];
+    } else if (type === 'project') {
+      defaultTitle = 'Projects Section';
+      defaultItems = [{ name: '', technology: '', description: '' }];
+    } else if (type === 'certification') {
+      defaultTitle = 'Certifications Section';
+      defaultItems = [{ cert: '', issuer: '', year: '' }];
+    }
+
+    const newSec: Section = {
+      id,
+      title: defaultTitle,
+      type,
+      content: '',
+      items: defaultItems
+    };
+
+    setSections(prev => [...prev, newSec]);
+  };
+
+  // ─── Item Handlers ─────────────────────────────────────────────
+  const addItemToSection = (sectionId: string) => {
+    setSections(prev =>
+      prev.map(sec => {
+        if (sec.id !== sectionId) return sec;
+        let newItem = {};
+        if (sec.type === 'experience') {
+          newItem = { company: '', title: '', duration: '', responsibilities: '' };
+        } else if (sec.type === 'education') {
+          newItem = { degree: '', institute: '', duration: '' };
+        } else if (sec.type === 'project') {
+          newItem = { name: '', technology: '', description: '' };
+        } else if (sec.type === 'certification') {
+          newItem = { cert: '', issuer: '', year: '' };
+        }
+        return { ...sec, items: [...sec.items, newItem] };
+      })
+    );
+  };
+
+  const removeItemFromSection = (sectionId: string, itemIndex: number) => {
+    setSections(prev =>
+      prev.map(sec => {
+        if (sec.id !== sectionId) return sec;
+        return { ...sec, items: sec.items.filter((_, idx) => idx !== itemIndex) };
+      })
+    );
+  };
+
+  const updateSectionItemField = (sectionId: string, itemIndex: number, field: string, value: string) => {
+    setSections(prev =>
+      prev.map(sec => {
+        if (sec.id !== sectionId) return sec;
+        const updatedItems = [...sec.items];
+        updatedItems[itemIndex] = { ...updatedItems[itemIndex], [field]: value };
+        return { ...sec, items: updatedItems };
+      })
+    );
+  };
+
+  const updateSectionTextContent = (sectionId: string, value: string) => {
+    setSections(prev =>
+      prev.map(sec => (sec.id === sectionId ? { ...sec, content: value } : sec))
+    );
+  };
+
+  // ─── Print Logic ───────────────────────────────────────────────
+  const printResume = () => {
+    const resumeElement = document.getElementById('resume');
+    if (!resumeElement) return;
+    const newWindow = window.open('', '_blank', 'width=800,height=600');
+    if (newWindow) {
+      const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
+        .map(node => node.outerHTML)
+        .join('');
+      newWindow.document.write(
+        `<!DOCTYPE html><html><head><title></title>${styles}</head><body>${resumeElement.outerHTML}</body></html>`
+      );
+      newWindow.document.close();
+      newWindow.focus();
+      newWindow.print();
+      newWindow.close();
+    }
+  };
 
   return (
     <div className="wrapper">
-      {/* ------- LEFT PANEL (Form) ------- */}
+      {/* ═══════════════ LEFT PANEL (Form) ═══════════════ */}
       <div className="panel">
+        <h2 className="panel-title">Resume Builder</h2>
 
+        {/* Region & Target Role */}
         <label>Region</label>
-        <select value={region} onChange={e => setRegion(e.target.value)} id="region">
+        <select value={region} onChange={e => setRegion(e.target.value)}>
           <option>USA / Canada / UK / Australia</option>
           <option>China</option>
           <option>Russia</option>
-          <option>UAE</option>
+          <option>Europe</option>
         </select>
 
         <label>Target Role</label>
-        <select value={role} onChange={e => setRole(e.target.value)} id="role">
+        <select value={role} onChange={e => setRole(e.target.value)}>
           <option>Software Engineer</option>
           <option>Business Development</option>
           <option>Marketing Manager</option>
@@ -134,165 +239,295 @@ const printButton = () => window.print();
           <option>Student</option>
         </select>
 
+        {/* Personal Details */}
+        <h2 className="panel-title" style={{ fontSize: '15px', marginTop: '24px', borderBottom: '1px solid #f1f5f9', paddingBottom: '8px' }}>Personal Details</h2>
+        
         <label>Full Name</label>
-        <input id="fullName" value={fullName} onChange={e => setFullName(e.target.value)} />
+        <input value={fullName} onChange={e => setFullName(e.target.value)} placeholder="e.g. John Doe" />
+        
         <label>Email</label>
-        <input id="email" value={email} onChange={e => setEmail(e.target.value)} />
+        <input value={email} onChange={e => setEmail(e.target.value)} placeholder="e.g. john.doe@email.com" />
+        
         <label>Phone</label>
-        <input id="phone" value={phone} onChange={e => setPhone(e.target.value)} />
+        <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="e.g. +1 234 567 890" />
+        
         <label>Location</label>
-        <input id="location" value={location} onChange={e => setLocation(e.target.value)} />
-        <label>LinkedIn</label>
-        <input id="linkedin" value={linkedin} onChange={e => setLinkedin(e.target.value)} />
-        <div id="githubContainer">
-          <label>GitHub</label>
-          <input id="github" value={github} onChange={e => setGithub(e.target.value)} />
+        <input value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. New York, USA" />
+        
+        {/* Dynamic Social & Web Links */}
+        {contactLinks.map(link => (
+          <div key={link.id} style={{ marginBottom: '10px' }}>
+            <div className="contact-link-row">
+              <input
+                className="contact-link-label-input"
+                value={link.label}
+                onChange={e => renameContactLink(link.id, e.target.value)}
+                placeholder="Link Label (e.g. LinkedIn)"
+                title="Click to rename this link"
+              />
+              <button
+                className="section-header-btn delete-sec-btn"
+                style={{ width: '22px', height: '22px', fontSize: '11px' }}
+                onClick={() => removeContactLink(link.id)}
+                title="Remove this link"
+              >
+                −
+              </button>
+            </div>
+            <input
+              value={link.value}
+              onChange={e => updateContactLinkValue(link.id, e.target.value)}
+              placeholder={`e.g. link or username`}
+            />
+          </div>
+        ))}
+
+        {/* Add custom contact link button */}
+        <button
+          className="add-section-btn"
+          style={{ width: '100%', marginTop: '10px', fontSize: '12px', padding: '6px' }}
+          onClick={addContactLink}
+        >
+          + Add Link
+        </button>
+
+        {/* Dynamic Sections */}
+        {sections.map(sec => (
+          <div key={sec.id} className="section-form-group">
+            {/* Header: editable title input + controls */}
+            <div className="section-header-row">
+              <input
+                className="section-title-input"
+                value={sec.title}
+                onChange={e => renameSection(sec.id, e.target.value)}
+                placeholder="Section Name"
+                title="Click to rename this section"
+              />
+              
+              {/* Add item button (only visible for list-based sections) */}
+              {sec.type !== 'text' && (
+                <button
+                  className="section-header-btn add-item-btn"
+                  onClick={() => addItemToSection(sec.id)}
+                  title="Add item to this section"
+                >
+                  +
+                </button>
+              )}
+
+              {/* Remove entire section button */}
+              <button
+                className="section-header-btn delete-sec-btn"
+                onClick={() => removeSection(sec.id)}
+                title="Delete this entire section"
+              >
+                −
+              </button>
+            </div>
+
+            {/* Content: if type text, show simple textarea */}
+            {sec.type === 'text' && (
+              <textarea
+                value={sec.content}
+                onChange={e => updateSectionTextContent(sec.id, e.target.value)}
+                placeholder={`Enter details for ${sec.title}...`}
+              />
+            )}
+
+            {/* List items rendering */}
+            {sec.type !== 'text' && sec.items.map((item, idx) => (
+              <div key={idx} className="repeat-box">
+                {/* Delete current item button */}
+                <button
+                  className="item-delete-btn"
+                  onClick={() => removeItemFromSection(sec.id, idx)}
+                  title="Delete item"
+                >
+                  ✕
+                </button>
+
+                {sec.type === 'experience' && (
+                  <>
+                    <input
+                      placeholder="Company"
+                      value={item.company || ''}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'company', e.target.value)}
+                    />
+                    <input
+                      placeholder="Job Title"
+                      value={item.title || ''}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'title', e.target.value)}
+                    />
+                    <input
+                      placeholder="Duration (e.g. Jan 2022 – Present)"
+                      value={item.duration || ''}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'duration', e.target.value)}
+                    />
+                    <textarea
+                      placeholder="Responsibilities..."
+                      value={item.responsibilities || ''}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'responsibilities', e.target.value)}
+                    />
+                  </>
+                )}
+
+                {sec.type === 'education' && (
+                  <>
+                    <input
+                      placeholder="Degree / Qualification"
+                      value={item.degree || ''}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'degree', e.target.value)}
+                    />
+                    <input
+                      placeholder="Institute / University"
+                      value={item.institute || ''}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'institute', e.target.value)}
+                    />
+                    <input
+                      placeholder="Duration (e.g. 2016 – 2020)"
+                      value={item.duration || ''}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'duration', e.target.value)}
+                    />
+                  </>
+                )}
+
+                {sec.type === 'project' && (
+                  <>
+                    <input
+                      placeholder="Project Name"
+                      value={item.name || ''}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'name', e.target.value)}
+                    />
+                    <input
+                      placeholder="Technologies Used"
+                      value={item.technology || ''}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'technology', e.target.value)}
+                    />
+                    <textarea
+                      placeholder="Project Description..."
+                      value={item.description || ''}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'description', e.target.value)}
+                    />
+                  </>
+                )}
+
+                {sec.type === 'certification' && (
+                  <>
+                    <input
+                      placeholder="Certification Name"
+                      value={item.cert || ''}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'cert', e.target.value)}
+                    />
+                    <input
+                      placeholder="Issuing Organization"
+                      value={item.issuer || ''}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'issuer', e.target.value)}
+                    />
+                    <input
+                      placeholder="Year"
+                      value={item.year || ''}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'year', e.target.value)}
+                    />
+                  </>
+                )}
+              </div>
+            ))}
+          </div>
+        ))}
+
+        {/* Add Section Controller */}
+        <div className="add-section-container">
+          <h3>+ Add Section</h3>
+          <div className="add-section-btn-group">
+            <button className="add-section-btn" onClick={() => addCustomSection('text')}>Text Section</button>
+            <button className="add-section-btn" onClick={() => addCustomSection('experience')}>Experience Sec.</button>
+            <button className="add-section-btn" onClick={() => addCustomSection('project')}>Projects Sec.</button>
+            <button className="add-section-btn" onClick={() => addCustomSection('education')}>Education Sec.</button>
+          </div>
         </div>
-        <div id="portfolioContainer">
-          <label>Portfolio</label>
-          <input id="portfolio" value={portfolio} onChange={e => setPortfolio(e.target.value)} />
+
+        {/* Actions */}
+        <div className="action-buttons-row">
+          <button className="btn-print" onClick={printResume}>🖨 Print Resume</button>
         </div>
-        <label>Professional Summary</label>
-        <textarea id="summary" value={summary} onChange={e => setSummary(e.target.value)} />
-        <label>Core Skills</label>
-        <textarea id="skills" value={skills} onChange={e => setSkills(e.target.value)} />
-
-        {/* Experience Section */}
-        <h2 style={{ marginTop: '20px' }}>Experience</h2>
-        {experiences.map((exp, idx) => (
-          <div className="repeat-box experience-item" key={idx}>
-            <input placeholder="Company" value={exp.company}
-              onChange={e => updateArrayItem(setExperiences, experiences, idx, 'company', e.target.value)} />
-            <input placeholder="Job Title" value={exp.title}
-              onChange={e => updateArrayItem(setExperiences, experiences, idx, 'title', e.target.value)} />
-            <input placeholder="Duration" value={exp.duration}
-              onChange={e => updateArrayItem(setExperiences, experiences, idx, 'duration', e.target.value)} />
-            <textarea placeholder="Responsibilities" value={exp.responsibilities}
-              onChange={e => updateArrayItem(setExperiences, experiences, idx, 'responsibilities', e.target.value)} />
-            <button className="secondary" onClick={() => removeExperience(idx)} style={{ marginTop: '4px' }}>Delete</button>
-          </div>
-        ))}
-        <button className="primary" onClick={addExperience}>+ Add Experience</button>
-
-        {/* Education Section */}
-        <h2 style={{ marginTop: '20px' }}>Education</h2>
-        {educations.map((edu, idx) => (
-          <div className="repeat-box education-item" key={idx}>
-            <input placeholder="Degree" value={edu.degree}
-              onChange={e => updateArrayItem(setEducations, educations, idx, 'degree', e.target.value)} />
-            <input placeholder="Institute" value={edu.institute}
-              onChange={e => updateArrayItem(setEducations, educations, idx, 'institute', e.target.value)} />
-            <input placeholder="Duration" value={edu.duration}
-              onChange={e => updateArrayItem(setEducations, educations, idx, 'duration', e.target.value)} />
-            <button className="secondary" onClick={() => removeEducation(idx)} style={{ marginTop: '4px' }}>Delete</button>
-          </div>
-        ))}
-        <button className="primary" onClick={addEducation}>+ Add Education</button>
-
-        {/* Projects Section */}
-        <h2 style={{ marginTop: '20px' }}>Projects</h2>
-        {projects.map((proj, idx) => (
-          <div className="repeat-box project-item" key={idx}>
-            <input placeholder="Project Name" value={proj.name}
-              onChange={e => updateArrayItem(setProjects, projects, idx, 'name', e.target.value)} />
-            <input placeholder="Technology" value={proj.technology}
-              onChange={e => updateArrayItem(setProjects, projects, idx, 'technology', e.target.value)} />
-            <textarea placeholder="Description" value={proj.description}
-              onChange={e => updateArrayItem(setProjects, projects, idx, 'description', e.target.value)} />
-            <button className="secondary" onClick={() => removeProject(idx)} style={{ marginTop: '4px' }}>Delete</button>
-          </div>
-        ))}
-        <button className="primary" onClick={addProject}>+ Add Project</button>
-
-        {/* Certifications Section */}
-        <h2 style={{ marginTop: '20px' }}>Certifications</h2>
-        {certifications.map((cert, idx) => (
-          <div className="repeat-box cert-item" key={idx}>
-            <input placeholder="Certification" value={cert.cert}
-              onChange={e => updateArrayItem(setCertifications, certifications, idx, 'cert', e.target.value)} />
-            <input placeholder="Issuer" value={cert.issuer}
-              onChange={e => updateArrayItem(setCertifications, certifications, idx, 'issuer', e.target.value)} />
-            <input placeholder="Year" value={cert.year}
-              onChange={e => updateArrayItem(setCertifications, certifications, idx, 'year', e.target.value)} />
-            <button className="secondary" onClick={() => removeCertification(idx)} style={{ marginTop: '4px' }}>Delete</button>
-          </div>
-        ))}
-        <button className="primary" onClick={addCertification}>+ Add Certification</button>
-
-        <label style={{ marginTop: '20px' }}>Languages</label>
-        <input id="languages" value={languages} onChange={e => setLanguages(e.target.value)} />
-
-        <button className="primary" onClick={generateResume}>Generate Resume</button>
-        <button className="secondary" onClick={printResume}>Print Resume</button>
       </div>
 
-      {/* ------- RIGHT PANEL (Resume Preview) ------- */}
+      {/* ═══════════════ RIGHT PANEL (Resume Preview) ═══════════════ */}
       <div className="resume" id="resume">
-        <div className="resume-name" id="rName">{fullName || 'YOUR NAME'}</div>
-        <div className="resume-role" id="rRole">{role}</div>
-        <div className="contact" id="rContact">
-          {email} | {phone} | {location} | {linkedin}
+        <div className="resume-name">{fullName || 'YOUR NAME'}</div>
+        <div className="resume-role">{role}</div>
+        <div className="contact">
+          {[
+            email,
+            phone,
+            location,
+            ...contactLinks
+              .filter(link => link.value.trim() !== '')
+              .map(link => `${link.label}: ${link.value}`)
+          ]
+            .filter(Boolean)
+            .join('  |  ')}
         </div>
-        <div className="section">
-          <h3>Professional Summary</h3>
-          <p id="rSummary">{summary}</p>
-        </div>
-        <div className="section">
-          <h3>Core Skills</h3>
-          <p id="rSkills">{skills}</p>
-        </div>
-        <div className="section">
-          <h3>Professional Experience</h3>
-          <div id="rExperience">
-            {experiences.map((exp, idx) => (
-              <div className="entry" key={idx}>
-                <div className="entry-title">{exp.title}</div>
-                <div className="entry-sub">{exp.company} • {exp.duration}</div>
-                <div className="entry-desc">{exp.responsibilities}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="section">
-          <h3>Projects</h3>
-          <div id="rProjects">
-            {projects.map((proj, idx) => (
-              <div className="entry" key={idx}>
-                <div className="entry-title">{proj.name}</div>
-                <div className="entry-sub">{proj.technology}</div>
-                <div className="entry-desc">{proj.description}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="section">
-          <h3>Education</h3>
-          <div id="rEducation">
-            {educations.map((edu, idx) => (
-              <div className="entry" key={idx}>
-                <div className="entry-title">{edu.degree}</div>
-                <div className="entry-sub">{edu.institute}</div>
-                <div className="entry-desc">{edu.duration}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="section">
-          <h3>Certifications</h3>
-          <div id="rCertifications">
-            {certifications.map((cert, idx) => (
-              <div className="entry" key={idx}>
-                <div className="entry-title">{cert.cert}</div>
-                <div className="entry-sub">{cert.issuer}</div>
-                <div className="entry-desc">{cert.year}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="section">
-          <h3>Languages</h3>
-          <p id="rLanguages">{languages}</p>
-        </div>
+
+        {/* Render sections dynamically in preview */}
+        {sections.map(sec => {
+          // Skip empty sections
+          if (sec.type === 'text' && !sec.content.trim()) return null;
+          if (sec.type !== 'text' && sec.items.length === 0) return null;
+
+          return (
+            <div key={sec.id} className="section">
+              <h3>{sec.title}</h3>
+
+              {/* Text content type */}
+              {sec.type === 'text' && (
+                <p className="entry-desc">{sec.content}</p>
+              )}
+
+              {/* List items type */}
+              {sec.type !== 'text' && sec.items.map((item, idx) => {
+                // Determine item fields dynamically based on section type
+                let title = '';
+                let subtitle = '';
+                let date = '';
+                let desc = '';
+
+                if (sec.type === 'experience') {
+                  title = item.title;
+                  subtitle = item.company;
+                  date = item.duration;
+                  desc = item.responsibilities;
+                } else if (sec.type === 'education') {
+                  title = item.degree;
+                  subtitle = item.institute;
+                  date = item.duration;
+                } else if (sec.type === 'project') {
+                  title = item.name;
+                  subtitle = item.technology;
+                  desc = item.description;
+                } else if (sec.type === 'certification') {
+                  title = item.cert;
+                  subtitle = item.issuer;
+                  date = item.year;
+                }
+
+                // Check if any field is filled before rendering the item
+                if (!title && !subtitle && !date && !desc) return null;
+
+                return (
+                  <div key={idx} className="entry">
+                    <div className="entry-header">
+                      <div className="entry-title">{title}</div>
+                      {date && <div className="entry-date">{date}</div>}
+                    </div>
+                    {subtitle && <div className="entry-sub">{subtitle}</div>}
+                    {desc && <div className="entry-desc">{desc}</div>}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
