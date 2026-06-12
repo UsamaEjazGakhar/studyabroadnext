@@ -56,10 +56,10 @@ export default async function Sidebar() {
           </li>
         ))}
       </ul>
-      <h2 style={{ marginBottom: "0.5rem" }}>Create Resume</h2>
+      <h2 style={{ marginBottom: "0.5rem" }}>Request Resume</h2>
       <ul style={{ listStyle: "none", padding: 0 }}>
         <li style={{ marginBottom: "0.3rem" }}>
-          <Link href="/resume">Create Resume</Link>
+          <Link href="/resume">Request Resume</Link>
         </li>
       </ul>
       <div style={{ marginTop: "auto", paddingTop: "1rem" }}>

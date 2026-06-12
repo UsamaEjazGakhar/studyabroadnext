@@ -428,3 +428,13 @@ model ScholarshipAlert {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 }
+
+model ResumeRequest {
+  id           Int      @id @default(autoincrement())
+  gmail        String?
+  whatsapp     String?
+  paymentProof String   // stored file path/url
+  status       String   @default("Pending") // Pending, Approved, Rejected
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

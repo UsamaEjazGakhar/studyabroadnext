@@ -21,6 +21,8 @@ const Sidebar = () => {
     { href: "/admin/tools", label: "Free Tools" },
     { href: "/admin/scholarship-alerts", label: "Scholarship Alerts" },
     { href: "/admin/ai-features", label: "AI Features" },
+    { href: "/admin/resume-builder", label: "Resume Builder" },
+    { href: "/admin/resume-requests", label: "Resume Requests" },
     { href: "/admin/settings", label: "Settings" },
   ];
 
