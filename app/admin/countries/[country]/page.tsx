@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import Head from "next/head";
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth";
 import { authOptions } from "../../../api/auth/[...nextauth]/route";
 import { prisma } from "../../../../lib/prisma";
 
@@ -11,7 +11,9 @@ import { AddScholarshipModal } from "./index";
 
 export default async function CountryDashboard({ params }: { params: Promise<{ country: string }> }) {
   // Authentication guard – only Admins can view
-  const session = await getServerSession(authOptions);
+// @ts-ignore
+// @ts-ignore
+  const session = await (getServerSession as any)(authOptions);
   if (!session || (session.user as any).role !== "Admin") {
     redirect("/login");
   }

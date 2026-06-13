@@ -37,8 +37,8 @@ export default function EventsPage() {
                 flexDirection: "column",
                 transition: "transform 0.2s ease",
               }}
-              onMouseEnter={(el) => el.currentTarget.style.transform = "translateY(-5px)"}
-              onMouseLeave={(el) => el.currentTarget.style.transform = "none"}
+              onMouseEnter={(el) => (el.currentTarget as any).style.transform = "translateY(-5px)"}
+              onMouseLeave={(el) => (el.currentTarget as any).style.transform = "none"}
               >
                 <div style={{ height: "200px", background: "var(--surface-2)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-muted)" }}>
                   {/* Placeholder for actual image */}

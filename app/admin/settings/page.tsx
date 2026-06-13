@@ -1,4 +1,4 @@
-import { getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { PrismaClient } from "@prisma/client";
@@ -8,7 +8,7 @@ import LogoutButton from "../LogoutButton";
 const prisma = new PrismaClient();
 
 export default async function AdminSettings() {
-  const session = await getServerSession(authOptions);
+  const session = await (getServerSession as any)(authOptions);
   if (!session || (session.user as any).role !== "Admin") {
     redirect("/login");
   }

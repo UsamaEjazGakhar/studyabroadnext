@@ -7,7 +7,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     const resolvedParams = await params;
     const id = parseInt(resolvedParams.id);
     const body = await req.json();
-    const { name, email, phone, program, country, education, message } = body;
+    const { name, email, phone, program, country, education, message } = body as { name: string; email: string; phone?: string; program?: string; country?: string; education?: string; message?: string };
     const lead = await prisma.consultationLead.update({
       where: { id },
       data: { name, email, phone, program, country, education, message },

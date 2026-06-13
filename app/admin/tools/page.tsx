@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Head from "next/head";
-import { getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { PrismaClient } from "@prisma/client";
@@ -23,7 +23,7 @@ const FREE_TOOLS = [
 ];
 
 export default async function FreeToolsPage() {
-  const session = await getServerSession(authOptions);
+  const session = await (getServerSession as any)(authOptions);
   if (!session || (session.user as any).role !== "Admin") {
     redirect("/login");
   }
@@ -125,7 +125,7 @@ export default async function FreeToolsPage() {
                     </td>
                   </tr>
                 ) : (
-                  recentLeads.map((lead) => (
+                  recentLeads.map((lead: any) => (
                     <tr key={lead.id} style={{ borderBottom: "1px solid var(--surface-3)" }}>
                       <td style={{ padding: "1rem", fontWeight: 500 }}>{lead.name}</td>
                       <td style={{ padding: "1rem", color: "var(--text-muted)" }}>{lead.email}</td>

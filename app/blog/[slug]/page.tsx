@@ -66,7 +66,7 @@ export default async function BlogArticlePage({ params }: { params: { slug: stri
           {/* Tags */}
           {blog.tags && (
             <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "2rem" }}>
-              {blog.tags.split(",").map((tag, i) => (
+              {blog.tags.split(",").map((tag: string, i: number) => (
                 <span
                   key={i}
                   style={{
@@ -121,7 +121,7 @@ export default async function BlogArticlePage({ params }: { params: { slug: stri
             <section style={{ marginTop: "4rem" }}>
               <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--navy)", marginBottom: "1.5rem" }}>Related Articles</h2>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "1.5rem" }}>
-                {relatedArticles.map((article) => (
+                {relatedArticles.map((article: any) => (
                   <Link key={article.id} href={`/blog/${article.slug}`} style={{ textDecoration: "none", color: "inherit" }}>
                     <div
                       style={{

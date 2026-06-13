@@ -28,7 +28,7 @@ export default async function Home() {
   ]);
 
   const opportunities = [
-    ...latestScholarships.map((s) => ({
+    ...latestScholarships.map((s: any) => ({
       id: s.id,
       title: s.title,
       type: "scholarship" as const,
@@ -36,7 +36,7 @@ export default async function Home() {
       amount: s.amount || undefined,
       link: s.link || undefined,
     })),
-    ...latestUniversities.map((u) => ({
+    ...latestUniversities.map((u: any) => ({
       id: u.id,
       title: u.name,
       type: "university" as const,

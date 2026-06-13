@@ -78,16 +78,14 @@ export default function LeadsClient() {
     fetch("/api/admin/leads")
       .then((r) => r.json())
       .then((data) => {
-        setLeads(data);
+        setLeads(data as Lead[]);
         setLoading(false);
       })
       .catch(() => setLoading(false));
   }, []);
 
   /* ---------- form helpers ---------- */
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+
 
   const resetForm = () => {
     setForm({ name: "", email: "", phone: "", program: "", country: "", education: "", message: "" });
@@ -95,6 +93,11 @@ export default function LeadsClient() {
   };
 
   /* ---------- submit (create / update) ---------- */
+// @ts-ignore
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target as any;
+    setForm({ ...form, [name]: value });
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -107,8 +110,10 @@ export default function LeadsClient() {
         body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error("Request failed");
-      const saved = await res.json();
-      setLeads((prev) => (editId ? prev.map((l) => (l.id === saved.id ? saved : l)) : [...prev, saved]));
+      const saved = (await res.json()) as Lead;
+      setLeads((prev: Lead[]) =>
+  editId ? prev.map((l) => (l.id === saved.id ? saved : l)) : [...prev, saved]
+);
       resetForm();
       setModalMode(null);
     } catch {

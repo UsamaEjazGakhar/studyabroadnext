@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
 // POST: approve or reject a resume request
 export async function POST(request: NextRequest) {
   try {
-    const { requestId, status } = await request.json(); // status: "Approved" | "Rejected"
+    const { requestId, status } = (await request.json()) as { requestId: string | number; status: "Approved" | "Rejected" }; // status: "Approved" | "Rejected"
     
     if (!requestId || !status) {
       return NextResponse.json({ error: "Missing requestId or status" }, { status: 400 });

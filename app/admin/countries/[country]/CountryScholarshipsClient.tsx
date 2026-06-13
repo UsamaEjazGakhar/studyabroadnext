@@ -103,7 +103,8 @@ export default function CountryScholarshipsClient({
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
+// @ts-ignore
+    const { name, value } = e.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
     setForm((prev) => ({
       ...prev,
       [name]: name === "categoryId" || name === "universityId" ? parseInt(value) : value,
@@ -150,10 +151,10 @@ export default function CountryScholarshipsClient({
         setError('Failed to save scholarship – please check console for details.');
         return; // abort further processing
       }
-      const saved = await res.json();
+      const saved = (await res.json()) as Scholarship;
 
       setScholarships((prev) =>
-        editId ? prev.map((s) => (s.id === saved.id ? saved : s)) : [saved, ...prev]
+        (editId ? prev.map((s) => (s.id === saved.id ? saved : s)) : [saved, ...prev]) as Scholarship[]
       );
       resetForm();
       setModalMode(null);

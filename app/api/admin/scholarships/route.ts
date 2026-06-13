@@ -40,7 +40,17 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body = await request.json() as {
+      title?: string;
+      description?: string;
+      deadline?: string;
+      benefits?: string;
+      eligibility?: string;
+      requiredDocuments?: string;
+      countryId?: string | number;
+      categoryId?: string | number;
+      universityId?: string | number;
+    };
   console.log('POST /api/admin/scholarships body:', body);
   // Normalize IDs to numbers (if they exist)
   const parsedCategoryId = body.categoryId ? parseInt(body.categoryId as any, 10) : undefined;
@@ -68,7 +78,7 @@ export async function POST(request: Request) {
     if (finalCategoryId) {
       // Try to find the category by ID
       const existing = await prisma.scholarshipCategory.findUnique({
-        where: { id: parseInt(finalCategoryId) },
+        where: { id: Number(finalCategoryId) },
       });
       if (!existing) {
         // Map known IDs to names or fallback
@@ -96,7 +106,7 @@ export async function POST(request: Request) {
     let finalUniversityId = universityId;
     if (!finalUniversityId) {
       const country = await prisma.country.findUnique({
-        where: { id: parseInt(countryId) },
+        where: { id: Number(countryId) },
       });
       const countryName = country?.name || `Country-${countryId}`;
       const defaultUniName = `Default University (${countryName})`;
@@ -106,7 +116,7 @@ export async function POST(request: Request) {
         update: {},
         create: {
           name: defaultUniName,
-          countryId: parseInt(countryId),
+          countryId: Number(countryId),
         },
       });
       finalUniversityId = defaultUniversity.id;
@@ -120,9 +130,9 @@ export async function POST(request: Request) {
         benefits: benefits || null,
         eligibility: eligibility || null,
         requiredDocuments: requiredDocuments || null,
-        countryId: parseInt(countryId),
-        categoryId: parseInt(finalCategoryId),
-        universityId: parseInt(finalUniversityId),
+        countryId: Number(countryId),
+        categoryId: Number(finalCategoryId),
+        universityId: Number(finalUniversityId),
       },
       include: {
         category: true,

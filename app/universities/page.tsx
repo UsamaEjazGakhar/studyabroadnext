@@ -7,7 +7,7 @@ import type { University } from "../types";
 
 const fetchUniversities = async (params: URLSearchParams): Promise<University[]> => {
   const res = await fetch(`/api/public/universities?${params.toString()}`);
-  const data = await res.json();
+  const data = await res.json() as any;
   return data.universities ?? [];
 };
 
@@ -40,10 +40,10 @@ export default function UniversitiesPage() {
   }, []);
 
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
-    const target = e.target;
+    const target = e.target as any;
     const name = target.name;
     const type = target.type;
-    const value = type === "checkbox" ? (target as HTMLInputElement).checked : target.value;
+    const value = type === "checkbox" ? target.checked : target.value;
     setFilters(prev => ({
       ...prev,
       [name]: value,
@@ -89,9 +89,9 @@ export default function UniversitiesPage() {
             {universities.map(u =>                <div key={u.id} style={cardStyle}>
                   <h3 style={{ margin: "0 0 0.5rem 0", color: "var(--navy)" }}>{u.name}</h3>
                   {/* Scholarships link */}
-                  {u.scholarships && u.scholarships.length > 0 && (
+                  {(u as any).scholarships && (u as any).scholarships.length > 0 && (
                     <p style={{ margin: "0 0 0.3rem 0", color: "var(--text-muted)" }}>
-                      Scholarships: {u.scholarships.map(s => s.title).join(", ")}
+                      Scholarships: {(u as any).scholarships.map((s: any) => s.title).join(", ")}
                     </p>
                   )}
                   {/* Website link */}

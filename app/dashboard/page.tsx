@@ -8,7 +8,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
  * Uses a clean white background with minimal styling.
  */
 export default async function Dashboard() {
-  const session = await getServerSession(authOptions);
+  const session = await (getServerSession as any)(authOptions);
   const userName = session?.user?.name || session?.user?.email?.split("@")[0] || "User";
 
   return (

@@ -39,7 +39,7 @@ export default async function CountryPage({ params }: { params: Promise<{ countr
   // Fetch live PhD programs from external API
   const apiBase = process.env.EXTERNAL_API_BASE_URL || '';
   const phdRes = await fetch(`${apiBase}/entries?category=Education&https=true`);
-  const phdJson = await phdRes.json();
+  const phdJson = await phdRes.json() as any;
   const livePrograms = phdJson.programs ?? [];
 
   // Mock data for other sections

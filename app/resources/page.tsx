@@ -68,8 +68,8 @@ export default function ResourcesPage() {
                 borderTop: "4px solid var(--orange)",
                 transition: "transform 0.2s ease",
               }}
-              onMouseEnter={(el) => el.currentTarget.style.transform = "translateY(-3px)"}
-              onMouseLeave={(el) => el.currentTarget.style.transform = "none"}
+              onMouseEnter={(el) => (el.currentTarget as any).style.transform = "translateY(-3px)"}
+              onMouseLeave={(el) => (el.currentTarget as any).style.transform = "none"}
               >
                 <div style={{ marginBottom: "1rem" }}>
                   <span className="badge badge-orange">{r.type}</span>

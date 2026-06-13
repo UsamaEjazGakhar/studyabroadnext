@@ -1,8 +1,20 @@
-import React, { useState } from "react";
+"use client";
+import React from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import Head from "next/head";
 
+interface FormData {
+  title: string;
+  region: string;
+  university: string;
+  amount: string;
+  deadline: string;
+  link: string;
+  description: string;
+}
+
 export default function AddScholarshipPage() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     title: "",
     region: "Europe",
     university: "",
@@ -13,12 +25,13 @@ export default function AddScholarshipPage() {
   });
   const [status, setStatus] = useState<string | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const target = e.target as any;
+    const { name, value } = target;
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus("Submitting...");
     try {
@@ -39,11 +52,14 @@ export default function AddScholarshipPage() {
           description: "",
         });
       } else {
-        const err = await res.json();
-        setStatus(`Error: ${err.error || "Failed to add"}`);
+        // The API returns an error object; we type‑cast it to access `error`
+        const err = (await res.json()) as { error?: string };
+        setStatus(`Error: ${err.error ?? "Failed to add"}`);
       }
     } catch (err) {
-      setStatus(`Error: ${err}`);
+      // err is unknown – convert to string safely
+      const message = err instanceof Error ? err.message : String(err);
+      setStatus(`Error: ${message}`);
     }
   };
 

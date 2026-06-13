@@ -18,7 +18,8 @@ export async function GET(request: NextRequest) {
 
 // POST: approve or reject a registration
 export async function POST(request: NextRequest) {
-  const { userId, action } = await request.json(); // action: "approve" | "reject"
+  const body = (await request.json()) as { userId: string | number; action: "approve" | "reject" }; // action: "approve" | "reject"
+  const { userId, action } = body;
   if (!userId || !action) {
     return NextResponse.json({ error: "Missing userId or action" }, { status: 400 });
   }

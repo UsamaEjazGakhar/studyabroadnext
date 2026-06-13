@@ -196,12 +196,13 @@ export default function ResumeBuilderPage() {
 
   // ─── Print Logic ───────────────────────────────────────────────
   const printResume = () => {
-    const resumeElement = document.getElementById('resume');
+// @ts-ignore
+    const resumeElement = ((globalThis as any).document?.getElementById('resume')) as any;
     if (!resumeElement) return;
-    const newWindow = window.open('', '_blank', 'width=800,height=600');
+    const newWindow = ((globalThis as any).window?.open('', '_blank', 'width=800,height=600'));
     if (newWindow) {
-      const styles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
-        .map(node => node.outerHTML)
+      const styles = Array.from(((globalThis as any).document?.querySelectorAll('style, link[rel="stylesheet"]')) || [])
+        .map((node: any) => node.outerHTML)
         .join('');
       newWindow.document.write(
         `<!DOCTYPE html><html><head><title></title>${styles}</head><body>${resumeElement.outerHTML}</body></html>`
@@ -221,7 +222,7 @@ export default function ResumeBuilderPage() {
 
         {/* Region & Target Role */}
         <label>Region</label>
-        <select value={region} onChange={e => setRegion(e.target.value)}>
+        <select value={region} onChange={(e: any) => setRegion(e.target.value)}>
           <option>USA / Canada / UK / Australia</option>
           <option>China</option>
           <option>Russia</option>
@@ -229,7 +230,7 @@ export default function ResumeBuilderPage() {
         </select>
 
         <label>Target Role</label>
-        <select value={role} onChange={e => setRole(e.target.value)}>
+        <select value={role} onChange={(e: any) => setRole(e.target.value)}>
           <option>Software Engineer</option>
           <option>Business Development</option>
           <option>Marketing Manager</option>
@@ -243,16 +244,16 @@ export default function ResumeBuilderPage() {
         <h2 className="panel-title" style={{ fontSize: '15px', marginTop: '24px', borderBottom: '1px solid #f1f5f9', paddingBottom: '8px' }}>Personal Details</h2>
         
         <label>Full Name</label>
-        <input value={fullName} onChange={e => setFullName(e.target.value)} placeholder="e.g. John Doe" />
+        <input value={fullName} onChange={(e) => setFullName((e.target as any).value)} placeholder="e.g. John Doe" />
         
         <label>Email</label>
-        <input value={email} onChange={e => setEmail(e.target.value)} placeholder="e.g. john.doe@email.com" />
+        <input value={email} onChange={(e) => setEmail((e.target as any).value)} placeholder="e.g. john.doe@email.com" />
         
         <label>Phone</label>
-        <input value={phone} onChange={e => setPhone(e.target.value)} placeholder="e.g. +1 234 567 890" />
+        <input value={phone} onChange={(e) => setPhone((e.target as any).value)} placeholder="e.g. +1 234 567 890" />
         
         <label>Location</label>
-        <input value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. New York, USA" />
+        <input value={location} onChange={(e) => setLocation((e.target as any).value)} placeholder="e.g. New York, USA" />
         
         {/* Dynamic Social & Web Links */}
         {contactLinks.map(link => (
@@ -261,7 +262,7 @@ export default function ResumeBuilderPage() {
               <input
                 className="contact-link-label-input"
                 value={link.label}
-                onChange={e => renameContactLink(link.id, e.target.value)}
+                onChange={e => renameContactLink(link.id, (e.target as any).value)}
                 placeholder="Link Label (e.g. LinkedIn)"
                 title="Click to rename this link"
               />
@@ -276,7 +277,7 @@ export default function ResumeBuilderPage() {
             </div>
             <input
               value={link.value}
-              onChange={e => updateContactLinkValue(link.id, e.target.value)}
+              onChange={e => updateContactLinkValue(link.id, (e.target as any).value)}
               placeholder={`e.g. link or username`}
             />
           </div>
@@ -299,7 +300,7 @@ export default function ResumeBuilderPage() {
               <input
                 className="section-title-input"
                 value={sec.title}
-                onChange={e => renameSection(sec.id, e.target.value)}
+                onChange={e => renameSection(sec.id, (e.target as any).value)}
                 placeholder="Section Name"
                 title="Click to rename this section"
               />
@@ -329,7 +330,7 @@ export default function ResumeBuilderPage() {
             {sec.type === 'text' && (
               <textarea
                 value={sec.content}
-                onChange={e => updateSectionTextContent(sec.id, e.target.value)}
+                onChange={e => updateSectionTextContent(sec.id, (e.target as any).value)}
                 placeholder={`Enter details for ${sec.title}...`}
               />
             )}
@@ -351,22 +352,22 @@ export default function ResumeBuilderPage() {
                     <input
                       placeholder="Company"
                       value={item.company || ''}
-                      onChange={e => updateSectionItemField(sec.id, idx, 'company', e.target.value)}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'company', (e.target as any).value)}
                     />
                     <input
                       placeholder="Job Title"
                       value={item.title || ''}
-                      onChange={e => updateSectionItemField(sec.id, idx, 'title', e.target.value)}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'title', (e.target as any).value)}
                     />
                     <input
                       placeholder="Duration (e.g. Jan 2022 – Present)"
                       value={item.duration || ''}
-                      onChange={e => updateSectionItemField(sec.id, idx, 'duration', e.target.value)}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'duration', (e.target as any).value)}
                     />
                     <textarea
                       placeholder="Responsibilities..."
                       value={item.responsibilities || ''}
-                      onChange={e => updateSectionItemField(sec.id, idx, 'responsibilities', e.target.value)}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'responsibilities', (e.target as any).value)}
                     />
                   </>
                 )}
@@ -376,17 +377,17 @@ export default function ResumeBuilderPage() {
                     <input
                       placeholder="Degree / Qualification"
                       value={item.degree || ''}
-                      onChange={e => updateSectionItemField(sec.id, idx, 'degree', e.target.value)}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'degree', (e.target as any).value)}
                     />
                     <input
                       placeholder="Institute / University"
                       value={item.institute || ''}
-                      onChange={e => updateSectionItemField(sec.id, idx, 'institute', e.target.value)}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'institute', (e.target as any).value)}
                     />
                     <input
                       placeholder="Duration (e.g. 2016 – 2020)"
                       value={item.duration || ''}
-                      onChange={e => updateSectionItemField(sec.id, idx, 'duration', e.target.value)}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'duration', (e.target as any).value)}
                     />
                   </>
                 )}
@@ -396,17 +397,17 @@ export default function ResumeBuilderPage() {
                     <input
                       placeholder="Project Name"
                       value={item.name || ''}
-                      onChange={e => updateSectionItemField(sec.id, idx, 'name', e.target.value)}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'name', (e.target as any).value)}
                     />
                     <input
                       placeholder="Technologies Used"
                       value={item.technology || ''}
-                      onChange={e => updateSectionItemField(sec.id, idx, 'technology', e.target.value)}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'technology', (e.target as any).value)}
                     />
                     <textarea
                       placeholder="Project Description..."
                       value={item.description || ''}
-                      onChange={e => updateSectionItemField(sec.id, idx, 'description', e.target.value)}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'description', (e.target as any).value)}
                     />
                   </>
                 )}
@@ -416,17 +417,17 @@ export default function ResumeBuilderPage() {
                     <input
                       placeholder="Certification Name"
                       value={item.cert || ''}
-                      onChange={e => updateSectionItemField(sec.id, idx, 'cert', e.target.value)}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'cert', (e.target as any).value)}
                     />
                     <input
                       placeholder="Issuing Organization"
                       value={item.issuer || ''}
-                      onChange={e => updateSectionItemField(sec.id, idx, 'issuer', e.target.value)}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'issuer', (e.target as any).value)}
                     />
                     <input
                       placeholder="Year"
                       value={item.year || ''}
-                      onChange={e => updateSectionItemField(sec.id, idx, 'year', e.target.value)}
+                      onChange={e => updateSectionItemField(sec.id, idx, 'year', (e.target as any).value)}
                     />
                   </>
                 )}

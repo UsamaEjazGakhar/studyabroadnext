@@ -1,13 +1,13 @@
 import SidebarLogout from "@/app/dashboard/components/SidebarLogout";
 import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import Link from "next/link";
 const prisma = new PrismaClient();
 
 export default async function Sidebar() {
   // Get session to identify the logged‑in user
-  const session = await getServerSession(authOptions);
+  const session = await (getServerSession as any)(authOptions);
   if (!session?.user?.email) {
     return null; // not logged in
   }

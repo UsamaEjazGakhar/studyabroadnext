@@ -7,6 +7,7 @@ export interface University {
   programs: string | null;
   intakeDates: string | null;
   country: { name: string };
+  website?: string; // Added optional website property
 }
 
 export interface Event {
@@ -43,4 +44,16 @@ export interface GrowthSection {
   description: string;
   ctaText: string;
   ctaLink: string;
+}
+
+// Blog interface
+export interface Blog {
+  id: number;
+  title: string;
+  slug: string;
+  category: { name: string };
+  publishedAt?: Date | string | null;
+  createdAt: Date | string;
+  metaTitle?: string;
+  metaDesc?: string;
 }

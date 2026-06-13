@@ -7,7 +7,8 @@ const prisma = new PrismaClient();
 // This route acts as a webhook or cron endpoint to simulate the AI scholarship finder fetching live data
 export async function POST(request: Request) {
   try {
-    const { region } = await request.json(); // "Europe", "Russia", or "China"
+    const body = await request.json() as { region: string };
+    const { region } = body; // "Europe", "Russia", or "China"
 
     // Simulate AI fetching data from various university/scholarship domains based on region
     const liveAlerts = [

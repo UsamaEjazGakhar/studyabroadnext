@@ -13,7 +13,7 @@ export async function GET() {
     if (!res.ok) {
       return NextResponse.json({ error: 'Failed to fetch fee data' }, { status: res.status });
     }
-    const data = await res.json();
+    const data: any = await res.json();
     // Transform the generic entries into a simple fee comparison shape.
     const feeInfo = (data.entries ?? []).slice(0, 5).map((e: any) => ({
       university: e.API,

@@ -18,7 +18,7 @@ export default function ScholarshipAlertsClient() {
   useEffect(() => {
     fetch("/api/admin/scholarship-alerts")
       .then((res) => res.json())
-      .then(setAlerts)
+      .then((data) => setAlerts(data as ScholarshipAlert[]))
       .catch(console.error);
   }, []);
 
@@ -31,9 +31,9 @@ export default function ScholarshipAlertsClient() {
     e.preventDefault();
     const form = e.currentTarget;
     const data = {
-      title: (form.title as any).value,
-      description: (form.description as any).value,
-      link: (form.link as any).value,
+      title: (form as any).title.value,
+      description: (form as any).description.value,
+      link: (form as any).link.value,
     };
     const res = await fetch("/api/admin/scholarship-alerts", {
       method: "POST",
@@ -41,7 +41,7 @@ export default function ScholarshipAlertsClient() {
       body: JSON.stringify(data),
     });
     if (res.ok) {
-      const newAlert = await res.json();
+      const newAlert = (await res.json()) as ScholarshipAlert;
       setAlerts((prev) => [...prev, newAlert]);
       resetForm();
     }
@@ -52,9 +52,9 @@ export default function ScholarshipAlertsClient() {
     if (!selected) return;
     const form = e.currentTarget;
     const data = {
-      title: (form.title as any).value,
-      description: (form.description as any).value,
-      link: (form.link as any).value,
+      title: (form as any).title.value,
+      description: (form as any).description.value,
+      link: (form as any).link.value,
     };
     const res = await fetch(`/api/admin/scholarship-alerts/${selected.id}`, {
       method: "PUT",
@@ -62,7 +62,7 @@ export default function ScholarshipAlertsClient() {
       body: JSON.stringify(data),
     });
     if (res.ok) {
-      const updated = await res.json();
+      const updated = (await res.json()) as ScholarshipAlert;
       setAlerts((prev) => prev.map((a) => (a.id === updated.id ? updated : a)));
       resetForm();
     }

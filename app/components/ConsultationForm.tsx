@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+
 const consultationSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email"),
@@ -38,14 +39,17 @@ const ConsultationForm: React.FC = () => {
       });
 
       if (response.ok) {
-        alert(`Thank you, ${data.name}! 🎓\n\nYour consultation request has been received. Our team will contact you shortly.`);
+        console.log(`Thank you, ${data.name}! 🎓\n\nYour consultation request has been received. Our team will contact you shortly.`);
       } else {
-        const errorData = await response.json();
-        alert("Failed to submit request: " + (errorData.message || "Please check your inputs."));
+        const errorData = (await response.json()) as { message?: string };
+        console.error(
+          "Failed to submit request: " +
+          (errorData.message ?? "Please check your inputs.")
+        );
       }
     } catch (error) {
       console.error(error);
-      alert("An error occurred. Please try again later.");
+      console.error("An error occurred. Please try again later.");
     } finally {
       setIsSubmitting(false);
     }
@@ -72,21 +76,21 @@ const ConsultationForm: React.FC = () => {
                 <div className="fg">
                   <label htmlFor="name">Full Name *</label>
                   <input type="text" id="name" {...register("name")} placeholder="Your full name" />
-                  {errors.name && <p style={{color: "red", fontSize: "0.8rem", marginTop: "-0.2rem"}}>{errors.name.message}</p>}
+                  {errors.name && <p style={{ color: "red", fontSize: "0.8rem", marginTop: "-0.2rem" }}>{errors.name.message}</p>}
                 </div>
-                
+
                 <div className="fg">
                   <label htmlFor="email">Email Address *</label>
                   <input type="email" id="email" {...register("email")} placeholder="your@email.com" />
-                  {errors.email && <p style={{color: "red", fontSize: "0.8rem", marginTop: "-0.2rem"}}>{errors.email.message}</p>}
+                  {errors.email && <p style={{ color: "red", fontSize: "0.8rem", marginTop: "-0.2rem" }}>{errors.email.message}</p>}
                 </div>
-                
+
                 <div className="fg">
                   <label htmlFor="phone">Phone Number *</label>
                   <input type="tel" id="phone" {...register("phone")} placeholder="+92 3XX XXXXXXX" />
-                  {errors.phone && <p style={{color: "red", fontSize: "0.8rem", marginTop: "-0.2rem"}}>{errors.phone.message}</p>}
+                  {errors.phone && <p style={{ color: "red", fontSize: "0.8rem", marginTop: "-0.2rem" }}>{errors.phone.message}</p>}
                 </div>
-                
+
                 <div className="fg">
                   <label htmlFor="program">Interested Program *</label>
                   <select id="program" {...register("program")}>
@@ -96,9 +100,9 @@ const ConsultationForm: React.FC = () => {
                     <option value="PhD">PhD in China</option>
                     <option value="Scholarship">Scholarship Programs</option>
                   </select>
-                  {errors.program && <p style={{color: "red", fontSize: "0.8rem", marginTop: "-0.2rem"}}>{errors.program.message}</p>}
+                  {errors.program && <p style={{ color: "red", fontSize: "0.8rem", marginTop: "-0.2rem" }}>{errors.program.message}</p>}
                 </div>
-                
+
                 <div className="fg">
                   <label htmlFor="country">Preferred Country *</label>
                   <select id="country" {...register("country")}>
@@ -109,9 +113,9 @@ const ConsultationForm: React.FC = () => {
                     <option value="Kazakhstan">Kazakhstan</option>
                     <option value="Any">Not sure yet</option>
                   </select>
-                  {errors.country && <p style={{color: "red", fontSize: "0.8rem", marginTop: "-0.2rem"}}>{errors.country.message}</p>}
+                  {errors.country && <p style={{ color: "red", fontSize: "0.8rem", marginTop: "-0.2rem" }}>{errors.country.message}</p>}
                 </div>
-                
+
                 <div className="fg">
                   <label htmlFor="education">Current Education *</label>
                   <select id="education" {...register("education")}>
@@ -120,7 +124,7 @@ const ConsultationForm: React.FC = () => {
                     <option value="Bachelors">Bachelors</option>
                     <option value="Masters">Masters</option>
                   </select>
-                  {errors.education && <p style={{color: "red", fontSize: "0.8rem", marginTop: "-0.2rem"}}>{errors.education.message}</p>}
+                  {errors.education && <p style={{ color: "red", fontSize: "0.8rem", marginTop: "-0.2rem" }}>{errors.education.message}</p>}
                 </div>
               </div>
 
@@ -132,7 +136,7 @@ const ConsultationForm: React.FC = () => {
               <div className="form-check">
                 <input type="checkbox" id="terms" {...register("terms")} />
                 <label htmlFor="terms">I agree to receive updates via WhatsApp and Email regarding my application.</label>
-                {errors.terms && <span style={{color: "red", fontSize: "0.8rem"}}>{errors.terms.message}</span>}
+                {errors.terms && <span style={{ color: "red", fontSize: "0.8rem" }}>{errors.terms.message}</span>}
               </div>
 
               <button type="submit" className="btn-primary" disabled={isSubmitting}>

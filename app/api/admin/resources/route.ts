@@ -13,7 +13,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { title, type, fileUrl, description } = body;
+    const { title, type, fileUrl, description } = body as { title: string; type: string; fileUrl: string; description?: string };
     const resource = await prisma.resource.create({ data: { title, type, fileUrl, description } });
     return NextResponse.json(resource, { status: 201 });
   } catch {

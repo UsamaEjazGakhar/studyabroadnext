@@ -3,6 +3,8 @@ import Link from "next/link";
 import { PrismaClient } from "@prisma/client";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import type { BlogCategory } from "@prisma/client";
+
 
 const prisma = new PrismaClient();
 
@@ -28,7 +30,11 @@ export default async function BlogPage({
     whereClause.category = { name: categoryFilter };
   }
 
-  const [blogs, totalCount, categories] = await Promise.all([
+  const [blogs, totalCount, categories]: [
+    any[],
+    number,
+    BlogCategory[]
+  ] = await Promise.all([
     prisma.blog.findMany({
       where: whereClause,
       include: { category: true },
@@ -80,7 +86,7 @@ export default async function BlogPage({
             >
               All
             </Link>
-            {categories.map((cat) => (
+            {categories.map((cat: BlogCategory) => (
               <Link
                 key={cat.id}
                 href={`/blog?category=${encodeURIComponent(cat.name)}`}
@@ -108,7 +114,7 @@ export default async function BlogPage({
             </p>
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "2rem" }}>
-              {blogs.map((blog) => (
+              {blogs.map((blog: (typeof blogs)[number]) => (
                 <Link
                   key={blog.id}
                   href={`/blog/${blog.slug}`}

@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     if (!res.ok) {
       return NextResponse.json({ error: 'University not found' }, { status: 404 });
     }
-    const data = await res.json();
+    const data = (await res.json()) as any;
     return NextResponse.json({ university: data }, {
       headers: { 'Cache-Control': 'public, max-age=3600' },
     });

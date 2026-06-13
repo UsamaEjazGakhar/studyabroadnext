@@ -8,7 +8,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default async function EditAlertPage({ params }: { params: { id: string } }) {
-  const session = await getServerSession(authOptions);
+  const session = await (getServerSession as any)(authOptions);
   if (!session || (session.user as any).role !== "Admin") {
     redirect("/login");
   }

@@ -58,7 +58,7 @@ export default async function OpportunitiesPage() {
             <section style={{ marginBottom: "3rem" }}>
               <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--navy)", marginBottom: "1.5rem" }}>🔥 Just Added</h2>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem" }}>
-                {alerts.map((a) => (
+                {alerts.map((a: any) => (
                   <div key={a.id} style={{ background: "linear-gradient(135deg, #fef3c7 0%, #fff7ed 100%)", padding: "1.5rem", borderRadius: "12px", border: "2px solid #f59e0b" }}>
                     <span style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", color: "#d97706" }}>New • {a.region}</span>
                     <h3 style={{ margin: "0.5rem 0", fontSize: "1.1rem", fontWeight: 600, color: "var(--navy)" }}>{a.title}</h3>
@@ -76,7 +76,7 @@ export default async function OpportunitiesPage() {
           <section style={{ marginBottom: "3rem" }}>
             <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--navy)", marginBottom: "1.5rem" }}>🎓 Available Scholarships</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.5rem" }}>
-              {scholarships.map((s) => (
+              {scholarships.map((s: any) => (
                 <div key={s.id} style={{ background: "white", padding: "1.5rem", borderRadius: "12px", boxShadow: "0 2px 16px rgba(0,0,0,0.06)", border: "1px solid #e2e8f0" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.75rem" }}>
                     <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--teal)", textTransform: "uppercase" }}>{s.country.name}</span>
@@ -95,7 +95,7 @@ export default async function OpportunitiesPage() {
           <section style={{ marginBottom: "3rem" }}>
             <h2 style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--navy)", marginBottom: "1.5rem" }}>🏛️ Featured Universities</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1.5rem" }}>
-              {universities.map((u) => (
+              {universities.map((u: any) => (
                 <Link key={u.id} href={`/universities/${u.id}`} style={{ textDecoration: "none", color: "inherit" }}>
                   <div style={{ background: "white", padding: "1.5rem", borderRadius: "12px", boxShadow: "0 2px 16px rgba(0,0,0,0.06)", border: "1px solid #e2e8f0", transition: "transform 0.2s ease" }}>
                     <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--teal)", textTransform: "uppercase" }}>{u.country.name}</span>

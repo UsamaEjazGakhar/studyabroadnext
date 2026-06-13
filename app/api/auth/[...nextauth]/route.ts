@@ -2,6 +2,7 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { NextRequest } from "next/server";
 
 const prisma = new PrismaClient();
 
@@ -13,7 +14,7 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email", placeholder: "admin@studyverse.com" },
         password: { label: "Password", type: "password" }
       },
-      async authorize(credentials) {
+      async authorize(credentials: { email: string; password: string } | undefined) {
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
@@ -89,6 +90,11 @@ export const authOptions: NextAuthOptions = {
   }
 };
 
-const handler = NextAuth(authOptions);
+const handler = NextAuth(authOptions) as any;
 
-export { handler as GET, handler as POST };
+export const GET = async (request: NextRequest) => {
+  return handler(request);
+};
+export const POST = async (request: NextRequest) => {
+  return handler(request);
+};

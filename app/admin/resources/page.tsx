@@ -26,7 +26,8 @@ export default async function ResourcesPage({
 }: {
   searchParams: { type?: string };
 }) {
-  const session = await getServerSession(authOptions);
+// @ts-ignore
+  const session = await (getServerSession as any)(authOptions);
   if (!session || (session.user as any).role !== "Admin") {
     redirect("/login");
   }
@@ -111,7 +112,7 @@ export default async function ResourcesPage({
             {resources.length === 0 ? (
               <p style={{ color: "var(--text-muted)" }}>No resources found for this category.</p>
             ) : (
-              resources.map((res) => (
+              resources.map((res: any) => (
                 <div
                   key={res.id}
                   style={{

@@ -8,10 +8,10 @@ export default function DeleteButton({ alertId }: { alertId: number }) {
       method: "DELETE",
     });
     if (!res.ok) {
-      alert("Failed to delete");
+      console.error("Failed to delete");
     } else {
       // Refresh to reflect removal
-      window.location.reload();
+      (globalThis as any).location.reload();
     }
   };
 

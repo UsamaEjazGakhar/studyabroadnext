@@ -3,6 +3,20 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
+// Helper to safely show alerts
+function showAlert(message: string) {
+  (globalThis as any).alert(message);
+}
+
+// Type for the send alerts API response
+interface TriggerResponse {
+  sentCount: number;
+  subscriberCount: number;
+  message?: string;
+}
+
+
+
 export default function TriggerButton() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -13,16 +27,16 @@ export default function TriggerButton() {
       const res = await fetch("/api/scholarships/send-alerts", {
         method: "POST",
       });
-      const data = await res.json();
+      const data = (await res.json()) as TriggerResponse;
       
       if (res.ok) {
-        alert(`Success! Sent ${data.sentCount} alerts to ${data.subscriberCount} subscribers.`);
+        showAlert(`Success! Sent ${data.sentCount} alerts to ${data.subscriberCount} subscribers.`);
         router.refresh();
       } else {
-        alert(`Error: ${data.message}`);
+        showAlert(`Error: ${data.message}`);
       }
     } catch (error) {
-      alert("Failed to trigger emails.");
+      showAlert("Failed to trigger emails.");
       console.error(error);
     } finally {
       setLoading(false);

@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma"; // Prisma client
     try {
       const { id: idStr } = await params;
       const id = parseInt(idStr);
-      const { name, country, website } = await request.json();
+      const { name, country, website } = await request.json() as { name: string; country: string; website?: string };
       if (!name || !country) {
         return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
       }

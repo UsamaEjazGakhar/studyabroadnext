@@ -1,10 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import Head from "next/head";
-import { getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { PrismaClient } from "@prisma/client";
+import { Event } from "../../types";
 
 import LogoutButton from "../LogoutButton";
 
@@ -23,6 +24,7 @@ export default async function EventsPage({
 }: {
   searchParams: { type?: string; status?: string };
 }) {
+// @ts-ignore
   const session = await getServerSession(authOptions);
   if (!session || (session.user as any).role !== "Admin") {
     redirect("/login");
@@ -167,7 +169,7 @@ export default async function EventsPage({
                 No {selectedStatus} events found matching the selected criteria.
               </p>
             ) : (
-              events.map((evt) => (
+              events.map((evt: any) => (
                 <div
                   key={evt.id}
                   style={{

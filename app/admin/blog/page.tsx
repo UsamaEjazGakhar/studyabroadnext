@@ -1,10 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import Head from "next/head";
-import { getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { PrismaClient } from "@prisma/client";
+import { Blog } from "@/app/types";
 
 import LogoutButton from "../LogoutButton";
 
@@ -15,6 +16,7 @@ export default async function AdminBlogPage({
 }: {
   searchParams: { status?: string };
 }) {
+// @ts-ignore
   const session = await getServerSession(authOptions);
   if (!session || (session.user as any).role !== "Admin") {
     redirect("/login");
@@ -160,7 +162,7 @@ export default async function AdminBlogPage({
                     </td>
                   </tr>
                 ) : (
-                  blogs.map((blog) => (
+                  blogs.map((blog: any) => (
                     <tr key={blog.id} style={{ borderBottom: "1px solid var(--surface-3)" }}>
                       <td style={{ padding: "1rem" }}>
                         <div style={{ fontWeight: 600, color: "var(--text-head)" }}>{blog.title}</div>

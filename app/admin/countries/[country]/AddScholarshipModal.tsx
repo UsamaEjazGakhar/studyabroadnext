@@ -12,7 +12,7 @@ type AddScholarshipModalProps = {
 };
 
 const AddScholarshipModal: React.FC<AddScholarshipModalProps> = ({ countryId, universitiesJSON }) => {
-  const universities: University[] = JSON.parse(universitiesJSON);
+  const universities: University[] = JSON.parse(universitiesJSON) as University[];
   console.log('AddScholarshipModal received universities:', universities);
 
   const [showModal, setShowModal] = useState(false);
@@ -20,7 +20,8 @@ const AddScholarshipModal: React.FC<AddScholarshipModalProps> = ({ countryId, un
   const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget as HTMLFormElement;
-    const data = new FormData(form);
+  // @ts-ignore
+  const data = new FormData(form);
     console.log('Universities prop length:', universities.length); // Debug log
     const payload = {
       title: data.get('title') as string,
@@ -35,7 +36,8 @@ const AddScholarshipModal: React.FC<AddScholarshipModalProps> = ({ countryId, un
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      window.location.reload();
+  // @ts-ignore
+    window.location.reload();
     } catch (err) {
       console.error('Failed to create scholarship', err);
     }

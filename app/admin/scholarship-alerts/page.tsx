@@ -17,7 +17,7 @@ export default async function ScholarshipAlertsPage({
 }: {
   searchParams: { region?: string };
 }) {
-  const session = await getServerSession(authOptions);
+  const session = await (getServerSession as any)(authOptions);
   if (!session || (session.user as any).role !== "Admin") {
     redirect("/login");
   }
@@ -63,7 +63,7 @@ export default async function ScholarshipAlertsPage({
   });
 
   // Normalize scholarship records to the alert shape for unified rendering
-  const normalizedScholarships = scholarships.map((s) => ({
+  const normalizedScholarships = scholarships.map((s: any) => ({
     id: s.id,
     createdAt: s.createdAt,
     region: s.country?.name || "",
@@ -79,8 +79,8 @@ export default async function ScholarshipAlertsPage({
   );
 
   // Calculate stats
-  const totalPending = alerts.filter(a => !a.isNotified).length;
-  const totalSent = alerts.filter(a => a.isNotified).length;
+  const totalPending = alerts.filter((a: any) => !a.isNotified).length;
+  const totalSent = alerts.filter((a: any) => a.isNotified).length;
 
   return (
     <>

@@ -4,7 +4,16 @@ const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const body = await req.json() as {
+      title: string;
+      region: string;
+      universityId?: number;
+      countryId?: number;
+      amount?: number;
+      deadline?: string;
+      link?: string;
+      description?: string;
+    };
     const { title, region, universityId, countryId, amount, deadline, link, description } = body;
     const alert = await prisma.scholarshipAlert.create({
       data: {
@@ -12,11 +21,11 @@ export async function POST(req: Request) {
         region,
         universityId: body.universityId,
         countryId: body.countryId,
-        amount: amount ?? null,
+        amount: (amount ?? null) as any,
         deadline: deadline ? new Date(deadline) : null,
         link: link ?? null,
         description: description ?? null,
-      },
+      } as any,
     });
     return new Response(JSON.stringify(alert), {
       status: 201,

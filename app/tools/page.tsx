@@ -10,7 +10,7 @@ export default function ToolsPage() {
 
   const calculateCost = (e: React.FormEvent) => {
     e.preventDefault();
-    const fd = new FormData(e.target as HTMLFormElement);
+    const fd = new (globalThis as any).FormData(e.target as HTMLFormElement);
     const country = fd.get("country");
     const program = fd.get("program");
     

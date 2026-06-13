@@ -13,7 +13,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
-  const { name, code } = await request.json();
+  const { name, code } = (await request.json()) as { name: string; code: string };
   const updated = await prisma.country.update({
     where: { id: parseInt(resolvedParams.id) },
     data: { name, code },

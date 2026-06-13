@@ -24,7 +24,7 @@ export default function ResumeRequestsPage() {
     try {
       setLoading(true);
       const res = await fetch('/api/admin/resume-request');
-      const data = await res.json();
+      const data = (await res.json()) as any;
       if (Array.isArray(data)) {
         setRequests(data);
       } else {
@@ -51,18 +51,18 @@ export default function ResumeRequestsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ requestId, status: newStatus }),
       });
-      const data = await res.json();
+      const data: any = await res.json();
       if (data.success) {
         // Update local state
         setRequests(prev =>
           prev.map(req => (req.id === requestId ? { ...req, status: newStatus } : req))
         );
       } else {
-        alert(data.error || 'Failed to update request status.');
+        console.error(data.error || 'Failed to update request status.');
       }
     } catch (err) {
       console.error(err);
-      alert('Network error. Please try again.');
+      console.error('Network error. Please try again.');
     } finally {
       setActioningId(null);
     }
@@ -264,8 +264,8 @@ export default function ResumeRequestsPage() {
                 color: '#64748b',
                 transition: 'background 0.2s'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.background = '#e2e8f0'}
-              onMouseLeave={(e) => e.currentTarget.style.background = '#f1f5f9'}
+              onMouseEnter={(e) => (e.currentTarget as any).style.background = '#e2e8f0'}
+              onMouseLeave={(e) => (e.currentTarget as any).style.background = '#f1f5f9'}
             >
               ✕
             </button>

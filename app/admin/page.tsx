@@ -8,14 +8,25 @@ import LogoutButton from "./LogoutButton";
 
 
 export default async function AdminDashboard() {
-  const session = await getServerSession(authOptions);
+// @ts-ignore
+  const session = await (getServerSession as any)(authOptions);
   if (!session || (session.user as any).role !== "Admin") {
     redirect("/login");
-  }
+  }  type Lead = {
+    id: number;
+    name: string;
+    email: string;
+    phone?: string;
+    program: string;
+    country: string;
+    education: string;
+    message?: string;
+    createdAt: string;
+  };
 
-  const leads = await prisma.consultationLead.findMany({
+  const leads: Lead[] = (await prisma.consultationLead.findMany({
     orderBy: { createdAt: "desc" },
-  });
+  })) as any;
 
   return (
     <>

@@ -30,7 +30,17 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     try {
       const resolvedParams = await params;
       const id = parseInt(resolvedParams.id);
-      const body = await request.json();
+      const body = await request.json() as {
+        title?: string;
+        description?: string;
+        deadline?: string;
+        benefits?: string;
+        eligibility?: string;
+        requiredDocuments?: string;
+        countryId?: string | number;
+        categoryId?: string | number;
+        universityId?: string | number;
+      };
 
       // Parse IDs to numbers if they exist
       const parsedCategoryId = body.categoryId ? parseInt(body.categoryId as any, 10) : undefined;
@@ -54,9 +64,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
       if (!existing) return NextResponse.json({ error: "Scholarship not found" }, { status: 404 });
 
       // Resolve final IDs, falling back to existing values when undefined
-      const finalCountryId = countryId !== undefined ? countryId : existing.countryId;
-      let finalCategoryId = categoryId !== undefined ? categoryId : existing.categoryId;
-      let finalUniversityId = universityId !== undefined ? universityId : existing.universityId;
+      const finalCountryId = (countryId !== undefined ? countryId : existing.countryId) as number;
+      let finalCategoryId = (categoryId !== undefined ? categoryId : existing.categoryId) as number;
+      let finalUniversityId = (universityId !== undefined ? universityId : existing.universityId) as number;
 
       // Ensure category exists (create if missing)
       if (!finalCategoryId) {

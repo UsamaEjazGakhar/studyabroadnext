@@ -20,7 +20,7 @@ export const ScholarshipList: React.FC<{ categoryId: number }> = ({ categoryId }
       try {
         const res = await fetch(`/api/scholarships?categoryId=${categoryId}`);
         if (!res.ok) throw new Error("Failed to load scholarships");
-        const data = await res.json();
+        const data = (await res.json()) as Scholarship[];
         setScholarships(data);
       } catch (e: any) {
         setError(e.message);

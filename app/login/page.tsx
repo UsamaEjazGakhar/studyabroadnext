@@ -19,7 +19,7 @@ export default function Login() {
       email,
       password,
       redirect: false,
-    });
+    }) as any;
 
     if (res?.error) {
       if (res.error?.includes('Pending approval')) {
@@ -50,11 +50,11 @@ export default function Login() {
           <form onSubmit={handleSubmit} className="form-grid" style={{ gap: "1rem" }}>
             <div className="fg">
               <label>Email Address</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@email.com" />
+              <input type="email" value={email} onChange={e => setEmail((e.target as any).value)} required placeholder="you@email.com" />
             </div>
             <div className="fg">
               <label>Password</label>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+              <input type="password" value={password} onChange={e => setPassword((e.target as any).value)} required />
             </div>
             <button type="submit" className="btn btn-primary" disabled={loading} style={{ justifySelf: "center" }}>
               {loading ? "Logging in..." : "Login"}

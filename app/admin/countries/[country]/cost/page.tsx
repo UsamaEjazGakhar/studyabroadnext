@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Head from "next/head";
-import { getServerSession } from "next-auth/next";
+import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { PrismaClient } from "@prisma/client";
@@ -11,6 +11,7 @@ import LogoutButton from "../../../LogoutButton";
 const prisma = new PrismaClient();
 
 export default async function CountryCostPage({ params }: { params: Promise<{ country: string }> }) {
+// @ts-ignore
   const session = await getServerSession(authOptions);
   if (!session || (session.user as any).role !== "Admin") {
     redirect("/login");

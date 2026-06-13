@@ -54,10 +54,10 @@ Message: ${validatedData.message || "N/A"}
     }
 
     return NextResponse.json({ success: true, lead }, { status: 201 });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Consultation API Error:", error);
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ success: false, errors: error.issues }, { status: 400 });
+      return NextResponse.json({ success: false, errors: (error as z.ZodError).issues }, { status: 400 });
     }
     return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });
   }

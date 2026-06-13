@@ -49,7 +49,7 @@ export default function Register() {
         method: "POST",
         body: formData,
       });
-      const data = await res.json();
+      const data = await res.json() as any;
       const duration = Math.round(performance.now() - startTime);
       const baseMessage = !res.ok ? (data.message || data.error || "Registration failed") : "Your account has been successfully created and is currently pending admin approval. You will receive an email once it is approved.";
       const fullMessage = `${baseMessage} Ready in ${duration}ms`;
@@ -73,33 +73,33 @@ export default function Register() {
           <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }} encType="multipart/form-data">
             <div className="fg">
               <label>First Name</label>
-              <input type="text" value={firstName} onChange={e => setFirstName(e.target.value)} required placeholder="First Name" />
+              <input type="text" value={firstName} onChange={e => setFirstName((e.target as any).value)} required placeholder="First Name" />
             </div>
             <div className="fg">
               <label>Last Name</label>
-              <input type="text" value={lastName} onChange={e => setLastName(e.target.value)} required placeholder="Last Name" />
+              <input type="text" value={lastName} onChange={e => setLastName((e.target as any).value)} required placeholder="Last Name" />
             </div>
             <div className="fg">
               <label>Email</label>
-              <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="you@example.com" />
+              <input type="email" value={email} onChange={e => setEmail((e.target as any).value)} required placeholder="you@example.com" />
             </div>
             <div className="fg">
               <label>Password</label>
-              <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+              <input type="password" value={password} onChange={e => setPassword((e.target as any).value)} required />
             </div>
             <div className="fg">
               <label>Confirm Password</label>
-              <input type="password" value={confirm} onChange={e => setConfirm(e.target.value)} required />
+              <input type="password" value={confirm} onChange={e => setConfirm((e.target as any).value)} required />
             </div>
             <div className="fg">
               <label>Profile Picture</label>
-              <input type="file" accept="image/*" onChange={e => setProfilePic(e.target.files?.[0] || null)} required />
+              <input type="file" accept="image/*" onChange={e => setProfilePic((e.target as any).files?.[0] || null)} required />
             </div>
             <div className="fg">
               <label>Payment Proof</label>
-              <input type="file" accept="image/*" onChange={e => setPaymentProof(e.target.files?.[0] || null)} required />
+              <input type="file" accept="image/*" onChange={e => setPaymentProof((e.target as any).files?.[0] || null)} required />
                 <label>Category</label>
-                <select name="categoryId" value={categoryId} onChange={e => setCategoryId(e.target.value)} required>
+                <select name="categoryId" value={categoryId} onChange={e => setCategoryId((e.target as any).value)} required>
                   <option value="" disabled>Select a category</option>
                   <option value="1">MBBS</option>
                   <option value="2">BDS</option>

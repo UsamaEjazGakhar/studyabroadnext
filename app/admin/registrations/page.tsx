@@ -19,11 +19,11 @@ export default function AdminRegistrations() {
   const fetchPending = async () => {
     try {
       const res = await fetch("/api/admin/registrations");
-      const data = await res.json();
+      const data: any = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to load");
       setUsers(data);
     } catch (e: any) {
-      setError(e.message);
+      setError(e.message || "An unexpected error occurred");
     }
   };
 
@@ -39,7 +39,7 @@ export default function AdminRegistrations() {
         headers: { "Content-Type": "application/json", "x-admin-id": "1" }, // placeholder admin ID
         body: JSON.stringify({ userId, action }),
       });
-      const data = await res.json();
+      const data: any = await res.json();
       if (!res.ok) throw new Error(data.error || "Action failed");
       // refresh list
       await fetchPending();

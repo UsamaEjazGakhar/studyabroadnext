@@ -16,7 +16,7 @@ export async function GET() {
 // Create a new university (accepts country name or countryId)
 export async function POST(request: Request) {
   try {
-    const { name, country, countryId, website } = await request.json();
+    const { name, country, countryId, website } = await request.json() as { name: string; country?: string; countryId?: string | number; website?: string; };
     if (!name) {
       return new NextResponse("Missing required fields", { status: 400 });
     }

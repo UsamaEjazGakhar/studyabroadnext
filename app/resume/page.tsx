@@ -5,14 +5,16 @@ export default function RequestResumePage() {
   const [gmail, setGmail] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [file, setFile] = useState<File | null>(null);
-  
+
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0]);
+    const files = (e.target as any).files;
+
+    if (files && files.length > 0) {
+      setFile(files[0]);
     }
   };
 
@@ -43,8 +45,7 @@ export default function RequestResumePage() {
         method: 'POST',
         body: formData,
       });
-
-      const data = await res.json();
+      const data = await res.json() as any;
 
       if (data.success) {
         setSuccess(true);
@@ -52,7 +53,7 @@ export default function RequestResumePage() {
         setWhatsapp('');
         setFile(null);
         // Reset file input value manually
-        const fileInput = document.getElementById('paymentProofInput') as HTMLInputElement;
+        const fileInput = (globalThis as any).document?.getElementById('paymentProofInput');
         if (fileInput) fileInput.value = '';
       } else {
         setError(data.message || 'Failed to submit your request.');
@@ -158,7 +159,7 @@ export default function RequestResumePage() {
             id="gmailInput"
             type="email"
             value={gmail}
-            onChange={e => setGmail(e.target.value)}
+            onChange={e => setGmail((e.target as any).value)}
             placeholder="e.g. yourname@gmail.com"
             style={{
               width: '100%',
@@ -190,7 +191,7 @@ export default function RequestResumePage() {
             id="whatsappInput"
             type="text"
             value={whatsapp}
-            onChange={e => setWhatsapp(e.target.value)}
+            onChange={e => setWhatsapp((e.target as any).value)}
             placeholder="e.g. +92 300 1234567"
             style={{
               width: '100%',
@@ -228,12 +229,12 @@ export default function RequestResumePage() {
               <div style={{ fontSize: '16px', fontWeight: 700, color: '#009E8C', marginTop: '2px' }}>03070011118</div>
             </div>
           </div>
-          
-          <div style={{ 
-            textAlign: 'center', 
-            fontWeight: 'bold', 
-            color: '#4a5e78', 
-            fontSize: '14px', 
+
+          <div style={{
+            textAlign: 'center',
+            fontWeight: 'bold',
+            color: '#4a5e78',
+            fontSize: '14px',
             margin: '4px 0',
             position: 'relative'
           }}>
@@ -243,16 +244,16 @@ export default function RequestResumePage() {
 
           <div style={{ textAlign: 'center' }}>
             <div style={{ fontSize: '12px', fontWeight: 600, color: '#4a5e78', textTransform: 'uppercase', marginBottom: '6px' }}>NayaPay (Scan to Pay)</div>
-            <img 
-              src="/qrnayapay.jpg" 
-              alt="NayaPay QR Code" 
-              style={{ 
-                maxWidth: '200px', 
-                height: 'auto', 
-                borderRadius: '8px', 
+            <img
+              src="/qrnayapay.jpg"
+              alt="NayaPay QR Code"
+              style={{
+                maxWidth: '200px',
+                height: 'auto',
+                borderRadius: '8px',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                display: 'inline-block' 
-              }} 
+                display: 'inline-block'
+              }}
             />
           </div>
 

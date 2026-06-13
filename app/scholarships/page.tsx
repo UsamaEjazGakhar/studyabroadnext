@@ -7,7 +7,7 @@ import { ScholarshipList, ScholarshipStyles } from "@/components/ScholarshipList
 async function fetchCurrentUser() {
   const res = await fetch("/api/user/me");
   if (!res.ok) return null;
-  return await res.json();
+  return (await res.json()) as any;
 }
 
 export default function ScholarshipsPage() {

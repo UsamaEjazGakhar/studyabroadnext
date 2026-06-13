@@ -66,7 +66,7 @@ export default function UniversitiesClient() {
   // fetch universities
   useEffect(() => {
     fetch("/api/admin/universities")
-      .then((r) => r.json())
+      .then((r) => r.json() as Promise<any[]>)
       .then((data) => {
         // Map country relation to country name string
         const transformed = data.map((u: any) => ({
@@ -83,7 +83,7 @@ export default function UniversitiesClient() {
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm({ ...form, [(e.target as any).name]: (e.target as any).value });
   };
 
   const resetForm = () => {
@@ -103,9 +103,9 @@ export default function UniversitiesClient() {
         body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error("Request failed");
-      const saved = await res.json();
+      const saved = (await res.json()) as any;
       // Ensure the saved university has a country string for UI consistency
-      const normalized = { ...saved, country: form.country };
+      const normalized = { ...(saved as any), country: form.country };
       setUniversities((prev) =>
         editId ? prev.map((u) => (u.id === normalized.id ? normalized : u)) : [...prev, normalized]
       );
